@@ -3,8 +3,8 @@
 }
 
 body {
-    background-color: white;
-    color: black;
+    background-color: #ffffff;
+    color: #000000;
 }
 
 body, h1, h2, p {
@@ -22,6 +22,27 @@ body, main {
 
 .global-header {
     height: 20vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    color: #ffc800;
+    font-size: 4rem;
+    margin-left: 2rem;
+}
+
+.historyBtn {
+    height: 50px;
+    width: 50px;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 2rem;
 }
 
 main {
