@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Money tracker</title>
+        <link rel="stylesheet" href="styles/basic.css" type="text/css">
+    </head>
+    <body>
+        <main>
+            <header class="global-header">
+                <h1>Money Tracker</h1> 
+                <button id="historyBtn">History</button>
+            </header>
+            <section id="homePage" class="page active-page">
+                <header>
+                    <h2>Home</h2>
+                </header>
+                <p id="balance-amount">Balance: $500</p>
+                <button id="transactionBtn">Add transaction</button>
+            </section>
+            <section id="transactionPage" class="page">
+                <header>
+                    <h2>Add a new transaction</h2>
+                </header>
+                <label for="transactionType">Type</label>
+                <select name="transactionType" id="transactionType">
+                    <option value="add">Add</option>
+                    <option value="subtract">Subtract</option>
+                </select>
+                <label for="transactionAmount">Amount:</label>
+                <input type="text" name="transactionAmount" id="transactionAmount">
+                <button id="confirmBtn">Confirm</button>
+                <button id="deleteBtn">Delete</button>
+                <button id="closeTransactionBtn">×</button>
+            </section>
+            <section id="historyPage" class="page">
+                <header>
+                    <h2>History</h2>
+                </header>
+                <div id="transactionHistory"></div>
+                <button id="closeHistoryBtn">×</button>
+            </section>
+        </main>
+        <script src="scripts/pageNav.js"></script>
+    </body>
+</html>
