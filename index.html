@@ -18,20 +18,26 @@
                 </header>
                 <button id="transactionBtn" class="transactionBtn">Add transaction</button>
             </section>
-            <section id="transactionPage" class="page">
+            <section id="transactionPage" class="page transactionPage">
                 <header>
                     <h2>Add a new transaction</h2>
                 </header>
-                <label for="transactionType">Type</label>
-                <select name="transactionType" id="transactionType">
-                    <option value="add">Add</option>
-                    <option value="subtract">Subtract</option>
-                </select>
-                <label for="transactionAmount">Amount:</label>
-                <input type="text" name="transactionAmount" id="transactionAmount">
-                <button id="confirmBtn">Confirm</button>
-                <button id="deleteBtn">Delete</button>
-                <button id="closeTransactionBtn">×</button>
+                <div class="transactionDetails">
+                    <label for="transactionType">Type:</label>
+                    <div class="selectWrapper">
+                        <select name="transactionType" id="transactionType">
+                            <option value="add">Add</option>
+                            <option value="subtract">Subtract</option>
+                        </select>
+                    </div>
+                    <label for="transactionAmount">Amount:</label>
+                    <input type="text" name="transactionAmount" id="transactionAmount">
+                    <div class="transactionBtns">
+                        <button id="confirmBtn" class="confirmBtn">Confirm</button>
+                        <button id="deleteBtn" class="deleteBtn">Delete</button>
+                    </div>
+                </div>
+                <button id="closeTransactionBtn" class="closePageBtn">×</button>
             </section>
             <section id="historyPage" class="page">
                 <header>
