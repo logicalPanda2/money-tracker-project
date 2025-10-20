@@ -39,12 +39,25 @@
                 </div>
                 <button id="closeTransactionBtn" class="closePageBtn">×</button>
             </section>
-            <section id="historyPage" class="page">
+            <section id="historyPage" class="page historyPage">
                 <header>
                     <h2>History</h2>
                 </header>
-                <div id="transactionHistory"></div>
-                <button id="closeHistoryBtn">×</button>
+                <div id="transactionHistory" class="transactionHistory">
+                    <div class="previousTransaction">
+                        <div class="previousTransactionAmount">+$322</div>
+                        <div class="previousTransactionDate">19/10/25</div>
+                    </div>
+                    <div class="previousTransaction">
+                        <div class="previousTransactionAmount">-$95</div>
+                        <div class="previousTransactionDate">15/10/25</div>
+                    </div>
+                    <div class="previousTransaction">
+                        <div class="previousTransactionAmount">-$64</div>
+                        <div class="previousTransactionDate">12/10/25</div>
+                    </div>
+                </div>
+                <button id="closeHistoryBtn" class="closePageBtn">×</button>
             </section>
         </main>
         <script src="scripts/pageNav.js"></script>

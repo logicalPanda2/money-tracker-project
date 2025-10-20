@@ -88,11 +88,11 @@ main {
     margin-top: 1rem;
 }
 
-.transactionPage {
+.transactionPage, .historyPage {
     padding: 1rem;
 }
 
-.transactionPage header {
+.transactionPage header, .historyPage header {
     font-size: 1.5rem;
 }
 
@@ -162,4 +162,31 @@ main {
     position: absolute;
     top: 8px;
     right: 15px;
+}
+
+.transactionHistory {
+    margin-top: 1rem;
+    width: 400px;
+}
+
+.previousTransaction {
+    padding: 8px;
+    height: 50px;
+    width: 90%;
+    border: 1px solid black;
+    border-radius: 12px;
+    position: relative;
+    margin-bottom: 12px;
+}
+
+.previousTransactionAmount {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.previousTransactionDate {
+    font-size: 0.8rem;
+    position: absolute;
+    top: 8px;
+    right: 8px;
 }
