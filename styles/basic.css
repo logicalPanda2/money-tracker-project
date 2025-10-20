@@ -47,6 +47,7 @@ h2 {
     justify-content: center;
     align-items: center;
     margin-right: 1rem;
+    transition: transform 200ms linear;
 }
 
 main {
@@ -86,6 +87,7 @@ main {
     align-items: center;
     font-size: 1rem;
     margin-top: 1rem;
+    transition: background-color 200ms ease-in;
 }
 
 .transactionPage, .historyPage {
@@ -142,6 +144,7 @@ main {
     background-color: #ffc800;
     border: 1px solid black;
     border-radius: 12px;
+    transition: background-color 200ms ease-in;
 }
 
 .deleteBtn {
@@ -160,7 +163,7 @@ main {
     align-items: center;
     font-size: 3rem;
     position: absolute;
-    top: 8px;
+    top: 4px;
     right: 15px;
 }
 
@@ -177,6 +180,8 @@ main {
     border-radius: 12px;
     position: relative;
     margin-bottom: 12px;
+    display: flex;
+    align-items: center;
 }
 
 .previousTransactionAmount {

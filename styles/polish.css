@@ -1,0 +1,45 @@
+.transactionBtn:hover {
+    background-color: #ffeeb0;
+}
+
+.confirmBtn:hover {
+    background-color: #ffeeb0;
+}
+
+.deleteBtn:hover {
+    background-color: #ff996a;
+}
+
+.historyBtn:hover {
+    transform: rotateZ(45deg);
+}
+
+@media (max-width: 625px) {
+    html {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 450px) {
+    .global-header {
+        height: 25vh;
+    }
+
+    h1 {
+        width: 50%;
+    }
+
+    .page {
+        height: 75vh;
+    }
+
+    .transactionDetails, .transactionHistory {
+        width: 70%;
+    }
+}
+
+@media (max-width: 355px) {
+    h2 {
+        width: 50%;
+    }
+}
