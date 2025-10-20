@@ -7,8 +7,8 @@ const closeHistoryBtn = document.getElementById("closeHistoryBtn");
 const closeTransactionBtn = document.getElementById("closeTransactionBtn");
 const confirmBtn = document.getElementById("confirmBtn");
 const deleteBtn = document.getElementById("deleteBtn");
-const pages = [homePage, homePage, homePage, homePage, transactionPage, historyPage];
-const buttons = [closeHistoryBtn, closeTransactionBtn, confirmBtn, deleteBtn, transactionBtn, historyBtn];
+const pages = [homePage, homePage, transactionPage, historyPage];
+const buttons = [closeHistoryBtn, closeTransactionBtn, transactionBtn, historyBtn];
 
 for(let i = 0; i < buttons.length; i++) {
     buttons[i].onclick = () => {

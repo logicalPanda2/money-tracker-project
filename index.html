@@ -15,7 +15,7 @@
             </header>
             <section id="homePage" class="page homePage active-page">
                 <header>
-                    <p id="balance-amount">Balance: $500</p>
+                    <p id="balanceAmount">Balance: $0</p>
                 </header>
                 <button id="transactionBtn" class="transactionBtn">Add transaction</button>
             </section>
@@ -44,23 +44,11 @@
                 <header>
                     <h2>History</h2>
                 </header>
-                <div id="transactionHistory" class="transactionHistory">
-                    <div class="previousTransaction">
-                        <div class="previousTransactionAmount">+$322</div>
-                        <div class="previousTransactionDate">19/10/25</div>
-                    </div>
-                    <div class="previousTransaction">
-                        <div class="previousTransactionAmount">-$95</div>
-                        <div class="previousTransactionDate">15/10/25</div>
-                    </div>
-                    <div class="previousTransaction">
-                        <div class="previousTransactionAmount">-$64</div>
-                        <div class="previousTransactionDate">12/10/25</div>
-                    </div>
-                </div>
+                <div id="transactionHistory" class="transactionHistory"></div>
                 <button id="closeHistoryBtn" class="closePageBtn">×</button>
             </section>
         </main>
         <script src="scripts/pageNav.js"></script>
+        <script src="scripts/balanceTracking.js"></script>
     </body>
 </html>
