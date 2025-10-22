@@ -19,6 +19,7 @@ let globalId = 0;
 function removeAll(className) {
     for(let i = 0; i < pages.length; i++) {
         pages[i].classList.remove(className);
+        pages[i].inert = true;
     }
 }
 
@@ -27,11 +28,13 @@ function resetTransactionPage() {
     transactionType.value = "income";
     removeAll("active-page");
     homePage.classList.add("active-page");
+    homePage.inert = false;
 }
 
 function moveToTransactionPage() {
     removeAll("active-page");
     transactionPage.classList.add("active-page");
+    transactionPage.inert = false;
 }
 
 function updateBalance(type, amount) {
@@ -52,7 +55,7 @@ function createHistoryElement(type, amount) {
     const dateAndTime = new Date;
     const dateAndTimeString = dateAndTime.toString();
     const date = dateAndTimeString.slice(4, 15);
-    let historyNode = document.createElement("div");
+    let historyNode = document.createElement("button");
     let amountElement = document.createElement("div");
     let dateElement = document.createElement("div");
     historyNode.id = globalId;
@@ -183,6 +186,7 @@ for(let i = 0; i < buttons.length; i++) {
     buttons[i].onclick = () => {
         removeAll("active-page");
         pages[i].classList.add("active-page");
+        pages[i].inert = false;
     }
 }
 
