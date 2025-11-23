@@ -41,9 +41,7 @@ Navigate to the index.html file in the `src` folder, then open it directly in yo
 - JavaScript (ES6)
 
 ## Known Issues
-1. NaN appears in balance if a non integer is given as input in the transaction page.
-2. Negative values appear in balance if a negative integer is given as input in the transaction page.
-3. When editing transactions in history, the prompt is "Add a new transaction" instead of "Edit the transaction".
+As of now, there are no known issues.
 
 Issues are welcome! Please open an issue in the repository when encountering new bugs.
 

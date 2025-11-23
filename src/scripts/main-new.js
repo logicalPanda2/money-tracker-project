@@ -118,7 +118,7 @@ confirmBtn.onclick = () => {
     if(isCurrentlyEditing) {
         const oldAmount = editedTransaction.amount;
         const oldType = editedTransaction.type;
-        const newAmount = transactionAmountField.value;
+        const newAmount = Number(transactionAmountField.value);
         const newType = transactionTypeField.value;
         const amountDifference = oldAmount - newAmount;
         if(newType === "income") {
@@ -129,7 +129,7 @@ confirmBtn.onclick = () => {
             }
             document.getElementById(editedTransaction.id).textContent = `+$${newAmount}`;
         } else {
-            const oldBalance = globalBalance;
+            const temp = globalBalance;
             if(newType !== oldType) {
                 globalBalance -= (newAmount + oldAmount);
             } else {
@@ -137,11 +137,13 @@ confirmBtn.onclick = () => {
             }
             if(globalBalance < 0) {
                 console.error("Unable to spend more than current balance");
-                globalBalance = oldBalance;
+                globalBalance = temp;
                 return false;
             }
             document.getElementById(editedTransaction.id).textContent = `-$${newAmount}`;
         }
+        editedTransaction.type = newType;
+        editedTransaction.amount = newAmount;
         globalBalanceAmount.innerHTML = `Balance: $${globalBalance}`;
         resetTransactionPage();
         moveToPage(homePage);
