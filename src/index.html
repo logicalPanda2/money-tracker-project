@@ -15,7 +15,7 @@
             </header>
             <section id="homePage" class="page homePage active-page">
                 <header>
-                    <p id="balanceAmount">Balance: $0</p>
+                    <p id="globalBalanceAmount">Balance: $0</p>
                 </header>
                 <button id="transactionBtn" class="transactionBtn">Add transaction</button>
             </section>
@@ -26,13 +26,13 @@
                 <div class="transactionDetails">
                     <label for="transactionType">Type:</label>
                     <div class="selectWrapper">
-                        <select name="transactionType" id="transactionType">
+                        <select name="transactionType" id="transactionTypeField">
                             <option value="income">Income</option>
                             <option value="expense">Expense</option>
                         </select>
                     </div>
                     <label for="transactionAmount">Amount:</label>
-                    <input type="text" name="transactionAmount" id="transactionAmount">
+                    <input type="text" name="transactionAmount" id="transactionAmountField">
                 </div>
                 <div class="transactionBtns">
                     <button id="confirmBtn" class="confirmBtn">Confirm</button>

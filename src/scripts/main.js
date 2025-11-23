@@ -1,50 +1,50 @@
-const homePage = document.getElementById("homePage");
-const transactionPage = document.getElementById("transactionPage");
-const historyPage = document.getElementById("historyPage");
-const transactionBtn = document.getElementById("transactionBtn");
-const historyBtn = document.getElementById("historyBtn");
-const closeTransactionBtn = document.getElementById("closeTransactionBtn");
-const closeHistoryBtn = document.getElementById("closeHistoryBtn");
-const confirmBtn = document.getElementById("confirmBtn");
-const deleteBtn = document.getElementById("deleteBtn");
-const balanceAmount = document.getElementById("balanceAmount");
-const transactionType = document.getElementById("transactionType");
-const transactionAmount = document.getElementById("transactionAmount");
-const transactionHistory = document.getElementById("transactionHistory");
-const pages = [homePage, transactionPage, historyPage];
-const buttons = [closeHistoryBtn, transactionBtn, historyBtn];
-let balance = 0;
+// const homePage = document.getElementById("homePage");
+// const transactionPage = document.getElementById("transactionPage");
+// const historyPage = document.getElementById("historyPage");
+// const transactionBtn = document.getElementById("transactionBtn");
+// const historyBtn = document.getElementById("historyBtn");
+// const closeTransactionBtn = document.getElementById("closeTransactionBtn");
+// const closeHistoryBtn = document.getElementById("closeHistoryBtn");
+// const confirmBtn = document.getElementById("confirmBtn");
+// const deleteBtn = document.getElementById("deleteBtn");
+// const balanceAmount = document.getElementById("balanceAmount");
+// const transactionType = document.getElementById("transactionType");
+// const transactionAmount = document.getElementById("transactionAmount");
+// const transactionHistory = document.getElementById("transactionHistory");
+// const pages = [homePage, transactionPage, historyPage];
+// const buttons = [closeHistoryBtn, transactionBtn, historyBtn];
+// let balance = 0;
 let globalId = 0;
 
-function removeAll(className) {
-    pages.forEach(page => {
-        page.classList.remove(className);
-        page.inert = true;
-    });
-}
+// function removeAll(className) {
+//     pages.forEach(page => {
+//         page.classList.remove(className);
+//         page.inert = true;
+//     });
+// }
 
-function resetTransactionPage() {
-    transactionAmount.value = null;
-    transactionType.value = "income";
-    removeAll("active-page");
-    homePage.classList.add("active-page");
-    homePage.inert = false;
-}
+// function resetTransactionPage() {
+//     transactionAmount.value = null;
+//     transactionType.value = "income";
+//     removeAll("active-page");
+//     homePage.classList.add("active-page");
+//     homePage.inert = false;
+// }
 
-function moveToTransactionPage() {
-    removeAll("active-page");
-    transactionPage.classList.add("active-page");
-    transactionPage.inert = false;
-}
+// function moveToTransactionPage() {
+//     removeAll("active-page");
+//     transactionPage.classList.add("active-page");
+//     transactionPage.inert = false;
+// }
 
-function updateBalance(type, amount) {
-    if(type === "income") {
-        balance += amount;
-    } else {
-        balance -= amount;
-    }
-    balanceAmount.innerHTML = `Balance: $${balance}`;
-}
+// function updateBalance(type, amount) {
+//     if(type === "income") {
+//         balance += amount;
+//     } else {
+//         balance -= amount;
+//     }
+//     balanceAmount.innerHTML = `Balance: $${balance}`;
+// }
 
 function updateHistory(type, amount) {
     createHistoryElement(type, amount);
@@ -148,17 +148,17 @@ function overrideEventListeners(id, oldAmount, oldType) {
     }
 }
 
-function validateTransaction(type, amount) {
-    if(amount <= 0 || isNaN(amount)) {
-        console.error("Amount must be a number and at least 1");
-        return 0;
-    }
-    if(type === "expense" && amount > balance) {
-        console.error("Unable to spend more than current balance");
-        return 0;
-    }
-    return 1;
-}
+// function validateTransaction(type, amount) {
+//     if(amount <= 0 || isNaN(amount)) {
+//         console.error("Amount must be a number and at least 1");
+//         return 0;
+//     }
+//     if(type === "expense" && amount > balance) {
+//         console.error("Unable to spend more than current balance");
+//         return 0;
+//     }
+//     return 1;
+// }
 
 function revertEventListeners() {
 
@@ -182,12 +182,12 @@ function revertEventListeners() {
     }
 }
 
-buttons.forEach((button, index) => {
-    button.onclick = () => {
-        removeAll("active-page");
-        pages[index].classList.add("active-page");
-        pages[index].inert = false;
-    }
-});
+// buttons.forEach((button, index) => {
+//     button.onclick = () => {
+//         removeAll("active-page");
+//         pages[index].classList.add("active-page");
+//         pages[index].inert = false;
+//     }
+// });
 
 revertEventListeners();
