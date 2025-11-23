@@ -21,6 +21,36 @@ buttons.forEach((button, index) => {
     }
 });
 
+class Transaction {
+    static transactionId = 0;
+
+    constructor(type, amount) {
+        this.transactionId = null;
+        this.type = type;
+        this.amount = amount;
+        this.date = null;
+        this.time = null;
+
+        this.initializeDateAndTime();
+        this.initializeId();
+    }
+
+    initializeDateAndTime() {
+        const dateObj = new Date();
+        const dateString = String(dateObj);
+        const date = dateString.slice(4, 15);
+        const time = dateString.slice(16, 24);
+        
+        this.date = date;
+        this.time = time;
+    }
+
+    initializeId() {
+        this.transactionId = Transaction.transactionId;
+        Transaction.transactionId += 1;
+    }
+}
+
 function moveToPage(page) {
     removeAll("active-page");
     page.classList.add("active-page");
@@ -35,28 +65,32 @@ function removeAll(className) {
 }
 
 function resetTransactionPage() {
-    transactionAmount.value = null;
-    transactionType.value = "income";
+    transactionAmountField.value = null;
+    transactionTypeField.value = "income";
     // moveToPage(homePage);
 }
 
-function updateBalance(type, amount) {
-    if(type === "income") {
-        balance += amount;
-    } else {
-        balance -= amount;
+function validateTransaction(transaction) {
+    if(transaction.amount <= 0) {
+        console.error("Amount must be at least 1");
+        return false;
     }
-    balanceAmount.innerHTML = `Balance: $${balance}`;
+    if(isNaN(transaction.amount)) {
+        console.error("Amount must be a number");
+        return false;
+    }
+    if(transaction.type === "expense" && transaction.amount > globalBalance) {
+        console.error("Cannot spend more than current balance");
+        return false;
+    }
+
+    return true;
 }
 
-function validateTransaction(type, amount) {
-    if(amount <= 0 || isNaN(amount)) {
-        console.error("Amount must be a number and at least 1");
-        return false;
+function updateBalance(transaction) {
+    if(transaction.type === "income") {
+        globalBalance += transaction.amount;
+    } else {
+        globalBalance -= transaction.amount;
     }
-    if(type === "expense" && amount > globalBalance) {
-        console.error("Unable to spend more than current balance");
-        return false;
-    }
-    return true;
 }
