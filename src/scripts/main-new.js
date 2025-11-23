@@ -16,6 +16,7 @@ const buttons = [closeHistoryBtn, transactionBtn, historyBtn];
 const transactions = [];
 let globalBalance = 0;
 let isCurrentlyEditing = false;
+let editedTransaction;
 
 buttons.forEach((button, index) => {
     button.onclick = () => {
@@ -69,6 +70,7 @@ function removeAll(className) {
 function resetTransactionPage() {
     transactionAmountField.value = null;
     transactionTypeField.value = "income";
+    transactionPage.querySelector("h2").textContent = "Add a new transaction";
 }
 
 function validateTransaction(type, amount) {
@@ -95,29 +97,95 @@ function updateBalance(transaction) {
         globalBalance -= transaction.amount;
     }
 
+    updateGlobalBalanceView();
+}
+
+function revertBalance(transaction) {
+    if(transaction.type === "income") {
+        globalBalance -= transaction.amount;
+    } else {
+        globalBalance += transaction.amount;
+    }
+
+    updateGlobalBalanceView();
+}
+
+function updateGlobalBalanceView() {
     globalBalanceAmount.textContent = `Balance: $${globalBalance}`;
 }
 
 confirmBtn.onclick = () => {
-    const type = transactionTypeField.value;
-    const amount = Number(transactionAmountField.value);
-    if(!validateTransaction(type, amount)) {
-        return false;
+    if(isCurrentlyEditing) {
+        const oldAmount = editedTransaction.amount;
+        const oldType = editedTransaction.type;
+        const newAmount = transactionAmountField.value;
+        const newType = transactionTypeField.value;
+        const amountDifference = oldAmount - newAmount;
+        if(newType === "income") {
+            if(newType !== oldType) {
+                globalBalance += (newAmount + oldAmount);
+            } else {
+                globalBalance -= amountDifference;
+            }
+            document.getElementById(editedTransaction.id).textContent = `+$${newAmount}`;
+        } else {
+            const oldBalance = globalBalance;
+            if(newType !== oldType) {
+                globalBalance -= (newAmount + oldAmount);
+            } else {
+                globalBalance += amountDifference;
+            }
+            if(globalBalance < 0) {
+                console.error("Unable to spend more than current balance");
+                globalBalance = oldBalance;
+                return false;
+            }
+            document.getElementById(editedTransaction.id).textContent = `-$${newAmount}`;
+        }
+        globalBalanceAmount.innerHTML = `Balance: $${globalBalance}`;
+        resetTransactionPage();
+        moveToPage(homePage);
+        isCurrentlyEditing = false;
+        editedTransaction = null;
+    } else {
+        const type = transactionTypeField.value;
+        const amount = Number(transactionAmountField.value);
+        if(!validateTransaction(type, amount)) {
+            return false;
+        }
+        const transaction = new Transaction(type, amount);
+        transactions.push(transaction);
+        updateBalance(transaction);
+        createTransactionHistory(transaction);
+        resetTransactionPage();
+        moveToPage(homePage);
     }
-    const transaction = new Transaction(type, amount);
-    transactions.push(transaction);
-    updateBalance(transaction);
-    createTransactionHistory(transaction);
-    resetTransactionPage();
-    moveToPage(homePage);
 }
 
 deleteBtn.onclick = () => {
-    resetTransactionPage();
-    moveToPage(homePage);
+    if(isCurrentlyEditing) {
+        const temp = globalBalance;
+        revertBalance(editedTransaction);
+        if(globalBalance < 0) {
+            console.error("Cannot delete: Balance cannot be less than 0");
+            globalBalance = temp;
+            globalBalanceAmount.textContent = `Balance: $${globalBalance}`;
+            return false;
+        }
+        document.getElementById(editedTransaction.id).closest(".previousTransaction").style.display = "none";
+        document.getElementById(editedTransaction.id).closest(".previousTransaction").hidden = true;
+        resetTransactionPage();
+        moveToPage(homePage);
+        isCurrentlyEditing = false;
+        editedTransaction = null;
+    }
 }
 
 closeTransactionBtn.onclick = () => {
+    if(isCurrentlyEditing) {
+        isCurrentlyEditing = false;
+        editedTransaction = null;
+    }
     resetTransactionPage();
     moveToPage(homePage);
 }
@@ -150,9 +218,10 @@ transactionHistory.onclick = (event) => {
         return false;
     }
     moveToPage(transactionPage);
-    isCurrentlyEditing = true;
     transactionPage.querySelector("h2").textContent = "Edit a transaction";
     const transaction = transactions.find(object => object.id === Number(event.target.id));
     transactionTypeField.value = transaction.type;
     transactionAmountField.value = transaction.amount;
+    isCurrentlyEditing = true;
+    editedTransaction = transaction;
 }

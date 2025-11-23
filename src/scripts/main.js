@@ -95,56 +95,56 @@ function updateHistory(type, amount) {
 function overrideEventListeners(id, oldAmount, oldType) {
 
     confirmBtn.onclick = () => {
-        const newAmount = Number(transactionAmount.value);
-        const newType = transactionType.value;
-        const amountDifference = oldAmount - newAmount;
-        if(newType === "income") {
-            if(newType !== oldType) {
-                balance += (newAmount + oldAmount);
-            } else {
-                balance -= amountDifference;
-            }
-            document.getElementById(`previousTransactionAmount${id}`).innerHTML = `+$${newAmount}`;
-        } else {
-            const oldBalance = balance;
-            if(newType !== oldType) {
-                balance -= (newAmount + oldAmount);
-            } else {
-                balance += amountDifference;
-            }
-            if(balance < 0) {
-                console.error("Unable to spend more than current balance");
-                balance = oldBalance;
-                resetTransactionPage();
-                revertEventListeners();
-                return 0;
-            }
-            document.getElementById(`previousTransactionAmount${id}`).innerHTML = `-$${newAmount}`;
-        }
-        balanceAmount.innerHTML = `Balance: $${balance}`;
-        resetTransactionPage();
-        revertEventListeners();
+        // const newAmount = Number(transactionAmount.value);
+        // const newType = transactionType.value;
+        // const amountDifference = oldAmount - newAmount;
+        // if(newType === "income") {
+        //     if(newType !== oldType) {
+        //         balance += (newAmount + oldAmount);
+        //     } else {
+        //         balance -= amountDifference;
+        //     }
+        //     document.getElementById(`previousTransactionAmount${id}`).innerHTML = `+$${newAmount}`;
+        // } else {
+        //     const oldBalance = balance;
+        //     if(newType !== oldType) {
+        //         balance -= (newAmount + oldAmount);
+        //     } else {
+        //         balance += amountDifference;
+        //     }
+        //     if(balance < 0) {
+        //         console.error("Unable to spend more than current balance");
+        //         balance = oldBalance;
+        //         resetTransactionPage();
+        //         revertEventListeners();
+        //         return 0;
+        //     }
+        //     document.getElementById(`previousTransactionAmount${id}`).innerHTML = `-$${newAmount}`;
+        // }
+        // balanceAmount.innerHTML = `Balance: $${balance}`;
+        // resetTransactionPage();
+        // revertEventListeners();
     }
 
     deleteBtn.onclick = () => {
-        const oldBalance = balance;
-        updateBalance(transactionType.value, -oldAmount);
-        if(balance < 0) {
-            console.error("Cannot delete: Balance cannot be less than 0");
-            balance = oldBalance;
-            balanceAmount.innerHTML = `Balance: $${balance}`;
-            resetTransactionPage();
-            revertEventListeners();
-            return 0;
-        }
-        document.getElementById(id).style.display = "none";
+        // const oldBalance = balance;
+        // updateBalance(transactionType.value, -oldAmount);
+        // if(balance < 0) {
+        //     console.error("Cannot delete: Balance cannot be less than 0");
+        //     balance = oldBalance;
+        //     balanceAmount.innerHTML = `Balance: $${balance}`;
+        //     resetTransactionPage();
+        //     revertEventListeners();
+        //     return 0;
+        // }
+        // document.getElementById(id).style.display = "none";
         resetTransactionPage();
         revertEventListeners();
     }
 
     closeTransactionBtn.onclick = () => {
-        resetTransactionPage();
-        revertEventListeners();
+        // resetTransactionPage();
+        // revertEventListeners();
     }
 }
 
