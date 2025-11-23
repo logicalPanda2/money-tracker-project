@@ -22,10 +22,10 @@ buttons.forEach((button, index) => {
 });
 
 class Transaction {
-    static transactionId = 0;
+    static id = 0;
 
     constructor(type, amount) {
-        this.transactionId = null;
+        this.id = null;
         this.type = type;
         this.amount = amount;
         this.date = null;
@@ -46,8 +46,8 @@ class Transaction {
     }
 
     initializeId() {
-        this.transactionId = Transaction.transactionId;
-        Transaction.transactionId += 1;
+        this.id = Transaction.id;
+        Transaction.id += 1;
     }
 }
 
@@ -104,6 +104,7 @@ confirmBtn.onclick = () => {
     }
     const transaction = new Transaction(type, amount);
     updateBalance(transaction);
+    createTransactionHistory(transaction);
     resetTransactionPage();
     moveToPage(homePage);
 }
@@ -116,4 +117,27 @@ deleteBtn.onclick = () => {
 closeTransactionBtn.onclick = () => {
     resetTransactionPage();
     moveToPage(homePage);
+}
+
+function createTransactionHistory(transaction) {
+    const transactionElement = document.createElement("button");
+    const amountElement = document.createElement("div");
+    const dateElement = document.createElement("div");
+    const timeElement = document.createElement("div");
+    transactionElement.id = transaction.id;
+    transactionElement.classList.add("previousTransaction");
+    amountElement.classList.add("previousTransactionAmount");
+    dateElement.classList.add("previousTransactionDate");
+    timeElement.classList.add("previousTransactionTime");
+    if(transaction.type === "income") {
+        amountElement.textContent = `+$${transaction.amount}`; 
+    } else {
+        amountElement.textContent = `-$${transaction.amount}`;
+    }
+    dateElement.textContent = transaction.date;
+    timeElement.textContent = transaction.time;
+    transactionElement.appendChild(amountElement);
+    transactionElement.appendChild(dateElement);
+    transactionElement.appendChild(timeElement);
+    transactionHistory.appendChild(transactionElement);
 }

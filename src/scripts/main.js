@@ -51,28 +51,28 @@ function updateHistory(type, amount) {
     enableHistoryEdit();
 }
 
-function createHistoryElement(type, amount) {
-    const dateAndTime = new Date;
-    const dateAndTimeString = dateAndTime.toString();
-    const date = dateAndTimeString.slice(4, 15);
-    let historyNode = document.createElement("button");
-    let amountElement = document.createElement("div");
-    let dateElement = document.createElement("div");
-    historyNode.id = globalId;
-    amountElement.id = "previousTransactionAmount" + globalId;
-    historyNode.classList.add("previousTransaction");
-    amountElement.classList.add("previousTransactionAmount");
-    dateElement.classList.add("previousTransactionDate");
-    if(type === "income") {
-        amountElement.innerHTML = `+$${amount}`; 
-    } else {
-        amountElement.innerHTML = `-$${amount}`;
-    }
-    dateElement.innerHTML = date;
-    historyNode.appendChild(amountElement);
-    historyNode.appendChild(dateElement);
-    transactionHistory.appendChild(historyNode);
-}
+// function createHistoryElement(type, amount) {
+//     const dateAndTime = new Date;
+//     const dateAndTimeString = dateAndTime.toString();
+//     const date = dateAndTimeString.slice(4, 15);
+//     let historyNode = document.createElement("button");
+//     let amountElement = document.createElement("div");
+//     let dateElement = document.createElement("div");
+//     historyNode.id = globalId;
+//     amountElement.id = "previousTransactionAmount" + globalId;
+//     historyNode.classList.add("previousTransaction");
+//     amountElement.classList.add("previousTransactionAmount");
+//     dateElement.classList.add("previousTransactionDate");
+//     if(type === "income") {
+//         amountElement.innerHTML = `+$${amount}`; 
+//     } else {
+//         amountElement.innerHTML = `-$${amount}`;
+//     }
+//     dateElement.innerHTML = date;
+//     historyNode.appendChild(amountElement);
+//     historyNode.appendChild(dateElement);
+//     transactionHistory.appendChild(historyNode);
+// }
 
 function enableHistoryEdit() {
     globalId++;

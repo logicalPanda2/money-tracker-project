@@ -196,3 +196,10 @@ main {
     top: 8px;
     right: 8px;
 }
+
+.previousTransactionTime {
+    font-size: 0.8rem;
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+}
