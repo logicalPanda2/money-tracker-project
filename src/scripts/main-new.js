@@ -11,6 +11,7 @@ const globalBalanceAmount = document.getElementById("globalBalanceAmount");
 const transactionTypeField = document.getElementById("transactionTypeField");
 const transactionAmountField = document.getElementById("transactionAmountField");
 const transactionHistory = document.getElementById("transactionHistory");
+const errorMessageContainer = document.getElementById("errorMessageContainer");
 const pages = [homePage, transactionPage, historyPage];
 const buttons = [closeHistoryBtn, transactionBtn, historyBtn];
 const transactions = [];
@@ -78,20 +79,21 @@ function resetTransactionPage() {
 }
 
 function validateTransaction(type, amount) {
-    if(amount <= 0) {
-        console.error("Amount must be at least 1");
-        return false;
-    }
-    if(isNaN(amount)) {
-        console.error("Amount must be a number");
-        return false;
-    }
-    if(type === "expense" && amount > globalBalance) {
-        console.error("Cannot spend more than current balance");
-        return false;
+    const errorObject = {
+        isValid: true,
+        message: "",
     }
 
-    return true;
+    if(amount <= 0 || isNaN(amount)) {
+        errorObject.message = "Amount must be a number:Amount must be at least 1";
+        errorObject.isValid = false;
+    }
+    if(type === "expense" && amount > globalBalance) {
+        errorObject.message = "Cannot spend more than current balance";
+        errorObject.isValid = false;
+    }
+
+    return errorObject;
 }
 
 function updateBalance(transaction) {
@@ -118,6 +120,25 @@ function updateGlobalBalanceView() {
     globalBalanceAmount.textContent = `Balance: $${globalBalance}`;
 }
 
+function displayError(messages) {
+    errorMessageContainer.textContent = null;
+    errorMessageContainer.style.display = "block";
+    errorMessageContainer.hidden = false;
+    const messagesArr = messages.split(":");
+    messagesArr.forEach(message => {
+        const errorMessage = document.createElement("p");
+        errorMessage.classList.add("errorMessage");
+        errorMessage.textContent = message;
+        errorMessageContainer.appendChild(errorMessage);
+    })
+}
+
+function removeErrors() {
+    errorMessageContainer.style.display = "none";
+    errorMessageContainer.hidden = true;
+    errorMessageContainer.textContent = null;
+}
+
 function createTransactionHistory(transaction) {
     const transactionElement = document.createElement("button");
     const amountElement = document.createElement("div");
@@ -142,6 +163,7 @@ function createTransactionHistory(transaction) {
 }
 
 function handleConfirm() {
+    removeErrors();
     if(isCurrentlyEditing) {
         const oldAmount = editedTransaction.amount;
         const oldType = editedTransaction.type;
@@ -163,7 +185,7 @@ function handleConfirm() {
                 globalBalance += amountDifference;
             }
             if(globalBalance < 0) {
-                console.error("Unable to spend more than current balance");
+                displayError("Unable to spend more than current balance");
                 globalBalance = temp;
                 return false;
             }
@@ -179,7 +201,9 @@ function handleConfirm() {
     } else {
         const type = transactionTypeField.value;
         const amount = Number(transactionAmountField.value);
-        if(!validateTransaction(type, amount)) {
+        const errorObject = validateTransaction(type, amount);
+        if(!errorObject.isValid) {
+            displayError(errorObject.message);
             return false;
         }
         const transaction = new Transaction(type, amount);
@@ -192,11 +216,12 @@ function handleConfirm() {
 }
 
 function handleDelete() {
+    removeErrors();
     if(isCurrentlyEditing) {
         const temp = globalBalance;
         revertBalance(editedTransaction);
         if(globalBalance < 0) {
-            console.error("Cannot delete: Balance cannot be less than 0");
+            displayError("Cannot delete: Balance cannot be less than 0");
             globalBalance = temp;
             updateGlobalBalanceView();
             return false;
@@ -207,10 +232,13 @@ function handleDelete() {
         moveToPage(homePage);
         isCurrentlyEditing = false;
         editedTransaction = null;
+    } else {
+        displayError("Cannot delete outside transaction editor:Press the close button to close this page");
     }
 }
 
 function handleClose() {
+    removeErrors();
     if(isCurrentlyEditing) {
         isCurrentlyEditing = false;
         editedTransaction = null;

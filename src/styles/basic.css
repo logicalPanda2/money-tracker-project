@@ -12,6 +12,7 @@ html {
     --font-opposite: oklch(100% 0.00011 271.152);
     --accent-color: oklch(81.459% 0.16752 76.226);
     --accent-color-second: oklch(56.56% 0.18795 37.308);
+    --error-color: oklch(55.398% 0.22734 29.223);
     --semantic-spacing-large: 2rem;
     --semantic-spacing-standard: 1rem;
     --decorative-spacing-large: 16px;
@@ -224,4 +225,15 @@ main {
     position: absolute;
     bottom: var(--decorative-spacing-small);
     right: var(--decorative-spacing-small);
+}
+
+.errorMessageContainer {
+    margin-top: var(--semantic-spacing-standard);
+}
+
+.errorMessage {
+    font-size: var(--font-size-extra-small);
+    color: var(--error-color);
+    margin-bottom: var(--decorative-spacing-small);
+    font-weight: 500;
 }
