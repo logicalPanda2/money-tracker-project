@@ -221,7 +221,7 @@ function handleDelete() {
         const temp = globalBalance;
         revertBalance(editedTransaction);
         if(globalBalance < 0) {
-            displayError("Cannot delete: Balance cannot be less than 0");
+            displayError("Cannot delete:Balance cannot be less than 0");
             globalBalance = temp;
             updateGlobalBalanceView();
             return false;
