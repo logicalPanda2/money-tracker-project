@@ -16,13 +16,17 @@ const buttons = [closeHistoryBtn, transactionBtn, historyBtn];
 const transactions = [];
 let globalBalance = 0;
 let isCurrentlyEditing = false;
-let editedTransaction;
+let editedTransaction = null;
 
 buttons.forEach((button, index) => {
     button.onclick = () => {
         moveToPage(pages[index]);
     }
 });
+confirmBtn.addEventListener("click", handleConfirm);
+deleteBtn.addEventListener("click", handleDelete);
+closeTransactionBtn.addEventListener("click", handleClose);
+transactionHistory.addEventListener("click", handleHistoryEdit);
 
 class Transaction {
     static id = 0;
@@ -114,7 +118,30 @@ function updateGlobalBalanceView() {
     globalBalanceAmount.textContent = `Balance: $${globalBalance}`;
 }
 
-confirmBtn.onclick = () => {
+function createTransactionHistory(transaction) {
+    const transactionElement = document.createElement("button");
+    const amountElement = document.createElement("div");
+    const dateElement = document.createElement("div");
+    const timeElement = document.createElement("div");
+    transactionElement.classList.add("previousTransaction");
+    amountElement.id = transaction.id;
+    amountElement.classList.add("previousTransactionAmount");
+    dateElement.classList.add("previousTransactionDate");
+    timeElement.classList.add("previousTransactionTime");
+    if(transaction.type === "income") {
+        amountElement.textContent = `+$${transaction.amount}`; 
+    } else {
+        amountElement.textContent = `-$${transaction.amount}`;
+    }
+    dateElement.textContent = transaction.date;
+    timeElement.textContent = transaction.time;
+    transactionElement.appendChild(amountElement);
+    transactionElement.appendChild(dateElement);
+    transactionElement.appendChild(timeElement);
+    transactionHistory.appendChild(transactionElement);
+}
+
+function handleConfirm() {
     if(isCurrentlyEditing) {
         const oldAmount = editedTransaction.amount;
         const oldType = editedTransaction.type;
@@ -144,7 +171,7 @@ confirmBtn.onclick = () => {
         }
         editedTransaction.type = newType;
         editedTransaction.amount = newAmount;
-        globalBalanceAmount.innerHTML = `Balance: $${globalBalance}`;
+        updateGlobalBalanceView();
         resetTransactionPage();
         moveToPage(homePage);
         isCurrentlyEditing = false;
@@ -164,14 +191,14 @@ confirmBtn.onclick = () => {
     }
 }
 
-deleteBtn.onclick = () => {
+function handleDelete() {
     if(isCurrentlyEditing) {
         const temp = globalBalance;
         revertBalance(editedTransaction);
         if(globalBalance < 0) {
             console.error("Cannot delete: Balance cannot be less than 0");
             globalBalance = temp;
-            globalBalanceAmount.textContent = `Balance: $${globalBalance}`;
+            updateGlobalBalanceView();
             return false;
         }
         document.getElementById(editedTransaction.id).closest(".previousTransaction").style.display = "none";
@@ -183,39 +210,16 @@ deleteBtn.onclick = () => {
     }
 }
 
-closeTransactionBtn.onclick = () => {
+function handleClose() {
     if(isCurrentlyEditing) {
         isCurrentlyEditing = false;
         editedTransaction = null;
     }
     resetTransactionPage();
-    moveToPage(homePage);
+    moveToPage(homePage);   
 }
 
-function createTransactionHistory(transaction) {
-    const transactionElement = document.createElement("button");
-    const amountElement = document.createElement("div");
-    const dateElement = document.createElement("div");
-    const timeElement = document.createElement("div");
-    transactionElement.classList.add("previousTransaction");
-    amountElement.id = transaction.id;
-    amountElement.classList.add("previousTransactionAmount");
-    dateElement.classList.add("previousTransactionDate");
-    timeElement.classList.add("previousTransactionTime");
-    if(transaction.type === "income") {
-        amountElement.textContent = `+$${transaction.amount}`; 
-    } else {
-        amountElement.textContent = `-$${transaction.amount}`;
-    }
-    dateElement.textContent = transaction.date;
-    timeElement.textContent = transaction.time;
-    transactionElement.appendChild(amountElement);
-    transactionElement.appendChild(dateElement);
-    transactionElement.appendChild(timeElement);
-    transactionHistory.appendChild(transactionElement);
-}
-
-transactionHistory.onclick = (event) => {
+function handleHistoryEdit(event) {
     if(event.target.matches(".previousTransactionDate") || event.target.matches(".previousTransactionTime")) {
         return false;
     }
