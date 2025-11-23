@@ -45,9 +45,8 @@ class Transaction {
 
     initializeDateAndTime() {
         const dateObj = new Date();
-        const dateString = String(dateObj);
-        const date = dateString.slice(4, 15);
-        const time = dateString.slice(16, 24);
+        const date = `${dateObj.getMonth().toString()}/${dateObj.getDate().toString()}/${dateObj.getFullYear().toString()}`;
+        const time = `${dateObj.getHours().toString()}:${dateObj.getMinutes().toString()}:${dateObj.getSeconds().toString()}`;
         
         this.date = date;
         this.time = time;
@@ -248,14 +247,15 @@ function handleClose() {
 }
 
 function handleHistoryEdit(event) {
-    if(event.target.matches(".previousTransactionDate") || event.target.matches(".previousTransactionTime")) {
+    if(event.target.matches(".previousTransactionAmount")) {
+        moveToPage(transactionPage);
+        transactionPage.querySelector("h2").textContent = "Edit a transaction";
+        const transaction = transactions.find(object => object.id === Number(event.target.id));
+        transactionTypeField.value = transaction.type;
+        transactionAmountField.value = transaction.amount;
+        isCurrentlyEditing = true;
+        editedTransaction = transaction;   
+    } else {
         return false;
     }
-    moveToPage(transactionPage);
-    transactionPage.querySelector("h2").textContent = "Edit a transaction";
-    const transaction = transactions.find(object => object.id === Number(event.target.id));
-    transactionTypeField.value = transaction.type;
-    transactionAmountField.value = transaction.amount;
-    isCurrentlyEditing = true;
-    editedTransaction = transaction;
 }
