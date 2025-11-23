@@ -2,61 +2,89 @@
     box-sizing: border-box;
 }
 
-body {
-    background-color: #ffffff;
-    color: #000000;
+:root {
+    --bg-default: oklch(100% 0.00011 271.152);
+    --font-default: oklch(0% 0 0);
+    --font-opposite: oklch(100% 0.00011 271.152);
+    --accent-color: oklch(81.459% 0.16752 76.226);
+    --accent-color-second: oklch(56.56% 0.18795 37.308);
+    --semantic-spacing-large: 2rem;
+    --semantic-spacing-standard: 1rem;
+    --decorative-spacing-large: 16px;
+    --decorative-spacing-standard: 12px;
+    --decorative-spacing-small: 8px;
+    --border-radius-standard: 8px;
+    --border-radius-small: 4px;
+    --font-size-extra-small: 0.8rem; 
+    --font-size-small: 1rem;
+    --font-size-half-medium: 1.5rem;
+    --font-size-medium: 2rem;
+    --font-size-large: 3rem;
+    --font-size-largest: 5rem;
+    --border-thin: 1px solid oklch(0% 0 0);
+    --border-default: 1.5px solid oklch(0% 0 0);
 }
 
-body, h1, h2, p {
+html {
+    font-size: 1rem;
+}
+
+body {
+    background-color: var(--bg-default);
+    color: var(--font-default);
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    overflow-x: hidden;
+}
+
+h1, h2, p {
     margin: 0;
 }
 
-body, button, input, select, option {
+button, input, select, option {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-body, main {
-    height: 100vh;
-    width: 100vw;
-}
-
-.global-header {
-    height: 20vh;
+.globalHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 h1 {
-    color: #ffc800;
-    font-size: 4rem;
-    margin-left: 1rem;
+    color: var(--accent-color);
+    font-size: clamp(var(--font-size-large), 5vw, var(--font-size-largest));
+    margin: var(--semantic-spacing-standard) 0 var(--semantic-spacing-standard) var(--decorative-spacing-large);
 }
 
-h2 {
+.transactionPage h2 {
+    max-width: 75%;
+}
+
+p#globalBalanceAmount, h2 {
+    font-size: clamp(var(--font-size-medium), 3vw, var(--font-size-large));
     font-weight: 400;
 }
 
 .historyBtn {
     height: 50px;
     width: 50px;
+    min-width: 50px;
     background-color: transparent;
-    padding: 0;
+    padding: var(--decorative-spacing-standard) 0 0 0;
     border: none;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 1rem;
-    transition: transform 200ms linear;
+    margin: 0 calc(var(--decorative-spacing-large) * 2);
 }
 
 main {
     position: relative;
+    width: 100vw;
 }
 
 .page {
-    height: 80vh;
-    width: 100vw;
     position: absolute;
     opacity: 0;
     z-index: 0;
@@ -67,49 +95,39 @@ main {
     z-index: 2;
 }
 
-.homePage {
-    padding: 1rem;
-}
-
-.homePage header {
-    font-size: 2.5rem;
+.homePage, .transactionPage, .historyPage {
+    width: 100%;
+    padding: var(--decorative-spacing-large);
+    padding-right: 0;
 }
 
 .transactionBtn {
-    height: 40px;
-    width: 150px;
-    background-color: #ffc800;
-    padding: 12px;
-    border: 1px solid black;
-    border-radius: 12px;
+    height: 2.5rem;
+    width: 10rem;
+    background-color: var(--accent-color);
+    padding: var(--decorative-spacing-standard);
+    border: var(--border-thin);
+    border-radius: var(--border-radius-standard);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1rem;
-    margin-top: 1rem;
+    font-size: var(--font-size-small);
+    margin-top: var(--semantic-spacing-standard);
     transition: background-color 200ms ease-in;
 }
 
-.transactionPage, .historyPage {
-    padding: 1rem;
-}
-
-.transactionPage header, .historyPage header {
-    font-size: 1.5rem;
-}
-
 .transactionDetails {
-    width: 400px;
+    width: clamp(10%, 20rem, 90%);
     display: flex;
     flex-direction: column;
 }
 
 .transactionDetails label {
-    margin: 1rem 0 4px 0;
+    margin: var(--semantic-spacing-standard) 0 var(--decorative-spacing-small) 0;
 }
 
 .transactionDetails select {
-    padding: 8px 0;
+    padding: var(--decorative-spacing-small) 0;
     width: 100%;
     height: 100%;
     border: none;   
@@ -120,89 +138,90 @@ main {
 }
 
 .transactionDetails input, .selectWrapper {
-    padding: 8px;
+    padding: var(--decorative-spacing-small);
     width: 90%;
-    border: 1px solid black;
-    border-radius: 12px;
+    border: var(--border-thin);
+    border-radius: var(--border-radius-standard);
 }
 
 .selectWrapper {
-    padding: 0 8px;
+    padding: 0 var(--decorative-spacing-small);
 }
 
 .selectWrapper:focus-within {
-    outline: 1.5px solid black;
+    outline: var(--border-default);
 }
 
 .transactionBtns {
-    margin-top: 1rem;
+    margin-top: var(--semantic-spacing-standard);
 }
 
 .confirmBtn, .deleteBtn {
-    width: 100px;
-    height: 30px;
-    background-color: #ffc800;
-    border: 1px solid black;
-    border-radius: 12px;
+    width: 6rem;
+    height: 2.25rem;
+    background-color: var(--accent-color);
+    border: var(--border-thin);
+    border-radius: var(--border-radius-standard);
     transition: background-color 200ms ease-in;
 }
 
 .deleteBtn {
-    background-color: #ca4000;
-    color: white;
+    background-color: var(--accent-color-second);
+    color: var(--font-opposite);
 }
 
 .closePageBtn {
     height: 50px;
     width: 50px;
+    min-width: 50px;
     background-color: transparent;
     padding: 0;
     border: none;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 3rem;
+    font-size: var(--font-size-large);
     position: absolute;
-    top: 4px;
-    right: 15px;
+    top: var(--decorative-spacing-small);
+    right: calc(var(--decorative-spacing-large) * 2);
 }
 
 .transactionHistory {
-    margin-top: 1rem;
+    margin-top: var(--semantic-spacing-large);
     width: 400px;
 }
 
 .previousTransaction {
-    height: 50px;
+    height: 3rem;
     width: 90%;
     padding: 0;
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 12px;
+    background-color: var(--bg-default);
+    border: var(--border-thin);
+    border-radius: var(--border-radius-standard);
     position: relative;
-    margin-bottom: 12px;
+    margin-bottom: var(--decorative-spacing-standard);
     display: flex;
     align-items: center;
 }
 
 .previousTransactionAmount {
-    font-size: 1.5rem;
+    font-size: var(--font-size-half-medium);
     font-weight: 500;
     width: 100%;
-    padding: 8px;
+    padding: var(--decorative-spacing-small);
     text-align: left;
 }
 
 .previousTransactionDate {
-    font-size: 0.8rem;
+    font-size: var(--font-size-extra-small);
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: var(--decorative-spacing-small);
+    right: var(--decorative-spacing-small);
 }
 
 .previousTransactionTime {
-    font-size: 0.8rem;
+    font-size: var(--font-size-extra-small);
     position: absolute;
-    bottom: 8px;
-    right: 8px;
+    bottom: var(--decorative-spacing-small);
+    right: var(--decorative-spacing-small);
 }
