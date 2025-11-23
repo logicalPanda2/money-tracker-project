@@ -18,6 +18,7 @@ html {
     --decorative-spacing-large: 16px;
     --decorative-spacing-standard: 12px;
     --decorative-spacing-small: 8px;
+    --decorative-spacing-extra-small: 5px;
     --border-radius-standard: 8px;
     --border-radius-small: 4px;
     --font-size-extra-small: 0.8rem; 
@@ -216,14 +217,14 @@ main {
 .previousTransactionDate {
     font-size: var(--font-size-extra-small);
     position: absolute;
-    top: var(--decorative-spacing-small);
+    top: var(--decorative-spacing-extra-small);
     right: var(--decorative-spacing-small);
 }
 
 .previousTransactionTime {
     font-size: var(--font-size-extra-small);
     position: absolute;
-    bottom: var(--decorative-spacing-small);
+    bottom: var(--decorative-spacing-extra-small);
     right: var(--decorative-spacing-small);
 }
 
