@@ -149,7 +149,7 @@ function overrideEventListeners(id, oldAmount, oldType) {
 }
 
 function validateTransaction(type, amount) {
-    if(amount === 0 || isNaN(amount)) {
+    if(amount <= 0 || isNaN(amount)) {
         console.error("Amount must be a number and at least 1");
         return 0;
     }
