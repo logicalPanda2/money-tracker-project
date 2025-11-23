@@ -74,23 +74,23 @@ function updateHistory(type, amount) {
 //     transactionHistory.appendChild(historyNode);
 // }
 
-function enableHistoryEdit() {
-    globalId++;
-    for(let i = 0; i < globalId; i++) {
-        document.getElementById(i).onclick = () => {
-            moveToTransactionPage();
-            const transactionAmountString = document.getElementById(`previousTransactionAmount${i}`).innerHTML;
-            const transactionAmountNum = Number(transactionAmountString.slice(2));
-            if(transactionAmountString[0] === "+") {
-                transactionType.value = "income";
-            } else {
-                transactionType.value = "expense";
-            }
-            transactionAmount.value = transactionAmountNum;
-            overrideEventListeners(i, transactionAmountNum, transactionType.value);
-        }
-    }
-}
+// function enableHistoryEdit() {
+//     globalId++;
+//     for(let i = 0; i < globalId; i++) {
+//         document.getElementById(i).onclick = () => {
+//             moveToTransactionPage();
+//             const transactionAmountString = document.getElementById(`previousTransactionAmount${i}`).innerHTML;
+//             const transactionAmountNum = Number(transactionAmountString.slice(2));
+//             if(transactionAmountString[0] === "+") {
+//                 transactionType.value = "income";
+//             } else {
+//                 transactionType.value = "expense";
+//             }
+//             transactionAmount.value = transactionAmountNum;
+//             overrideEventListeners(i, transactionAmountNum, transactionType.value);
+//         }
+//     }
+// }
 
 function overrideEventListeners(id, oldAmount, oldType) {
 

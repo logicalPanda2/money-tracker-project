@@ -13,7 +13,9 @@ const transactionAmountField = document.getElementById("transactionAmountField")
 const transactionHistory = document.getElementById("transactionHistory");
 const pages = [homePage, transactionPage, historyPage];
 const buttons = [closeHistoryBtn, transactionBtn, historyBtn];
+const transactions = [];
 let globalBalance = 0;
+let isCurrentlyEditing = false;
 
 buttons.forEach((button, index) => {
     button.onclick = () => {
@@ -103,6 +105,7 @@ confirmBtn.onclick = () => {
         return false;
     }
     const transaction = new Transaction(type, amount);
+    transactions.push(transaction);
     updateBalance(transaction);
     createTransactionHistory(transaction);
     resetTransactionPage();
@@ -124,8 +127,8 @@ function createTransactionHistory(transaction) {
     const amountElement = document.createElement("div");
     const dateElement = document.createElement("div");
     const timeElement = document.createElement("div");
-    transactionElement.id = transaction.id;
     transactionElement.classList.add("previousTransaction");
+    amountElement.id = transaction.id;
     amountElement.classList.add("previousTransactionAmount");
     dateElement.classList.add("previousTransactionDate");
     timeElement.classList.add("previousTransactionTime");
@@ -140,4 +143,16 @@ function createTransactionHistory(transaction) {
     transactionElement.appendChild(dateElement);
     transactionElement.appendChild(timeElement);
     transactionHistory.appendChild(transactionElement);
+}
+
+transactionHistory.onclick = (event) => {
+    if(event.target.matches(".previousTransactionDate") || event.target.matches(".previousTransactionTime")) {
+        return false;
+    }
+    moveToPage(transactionPage);
+    isCurrentlyEditing = true;
+    transactionPage.querySelector("h2").textContent = "Edit a transaction";
+    const transaction = transactions.find(object => object.id === Number(event.target.id));
+    transactionTypeField.value = transaction.type;
+    transactionAmountField.value = transaction.amount;
 }
