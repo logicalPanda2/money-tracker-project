@@ -17,10 +17,10 @@ let balance = 0;
 let globalId = 0;
 
 function removeAll(className) {
-    for(let i = 0; i < pages.length; i++) {
-        pages[i].classList.remove(className);
-        pages[i].inert = true;
-    }
+    pages.forEach(page => {
+        page.classList.remove(className);
+        page.inert = true;
+    });
 }
 
 function resetTransactionPage() {
@@ -182,12 +182,12 @@ function revertEventListeners() {
     }
 }
 
-for(let i = 0; i < buttons.length; i++) {
-    buttons[i].onclick = () => {
+buttons.forEach((button, index) => {
+    button.onclick = () => {
         removeAll("active-page");
-        pages[i].classList.add("active-page");
-        pages[i].inert = false;
+        pages[index].classList.add("active-page");
+        pages[index].inert = false;
     }
-}
+});
 
 revertEventListeners();
