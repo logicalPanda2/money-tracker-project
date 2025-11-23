@@ -67,19 +67,18 @@ function removeAll(className) {
 function resetTransactionPage() {
     transactionAmountField.value = null;
     transactionTypeField.value = "income";
-    // moveToPage(homePage);
 }
 
-function validateTransaction(transaction) {
-    if(transaction.amount <= 0) {
+function validateTransaction(type, amount) {
+    if(amount <= 0) {
         console.error("Amount must be at least 1");
         return false;
     }
-    if(isNaN(transaction.amount)) {
+    if(isNaN(amount)) {
         console.error("Amount must be a number");
         return false;
     }
-    if(transaction.type === "expense" && transaction.amount > globalBalance) {
+    if(type === "expense" && amount > globalBalance) {
         console.error("Cannot spend more than current balance");
         return false;
     }
@@ -93,4 +92,28 @@ function updateBalance(transaction) {
     } else {
         globalBalance -= transaction.amount;
     }
+
+    globalBalanceAmount.textContent = `Balance: $${globalBalance}`;
+}
+
+confirmBtn.onclick = () => {
+    const type = transactionTypeField.value;
+    const amount = Number(transactionAmountField.value);
+    if(!validateTransaction(type, amount)) {
+        return false;
+    }
+    const transaction = new Transaction(type, amount);
+    updateBalance(transaction);
+    resetTransactionPage();
+    moveToPage(homePage);
+}
+
+deleteBtn.onclick = () => {
+    resetTransactionPage();
+    moveToPage(homePage);
+}
+
+closeTransactionBtn.onclick = () => {
+    resetTransactionPage();
+    moveToPage(homePage);
 }

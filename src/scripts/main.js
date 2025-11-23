@@ -160,27 +160,27 @@ function overrideEventListeners(id, oldAmount, oldType) {
 //     return 1;
 // }
 
-function revertEventListeners() {
+// function revertEventListeners() {
 
-    confirmBtn.onclick = () => {
-        const type = transactionType.value;
-        const amount = Number(transactionAmount.value);
-        if(validateTransaction(type, amount) === 0) {
-            return 0;
-        }
-        updateBalance(type, amount);
-        updateHistory(type, amount);
-        resetTransactionPage();
-    }
+//     confirmBtn.onclick = () => {
+//         const type = transactionType.value;
+//         const amount = Number(transactionAmount.value);
+//         if(validateTransaction(type, amount) === 0) {
+//             return 0;
+//         }
+//         updateBalance(type, amount);
+//         updateHistory(type, amount);
+//         resetTransactionPage();
+//     }
 
-    deleteBtn.onclick = () => {
-        resetTransactionPage();
-    }
+//     deleteBtn.onclick = () => {
+//         resetTransactionPage();
+//     }
 
-    closeTransactionBtn.onclick = () => {
-        resetTransactionPage();
-    }
-}
+//     closeTransactionBtn.onclick = () => {
+//         resetTransactionPage();
+//     }
+// }
 
 // buttons.forEach((button, index) => {
 //     button.onclick = () => {
