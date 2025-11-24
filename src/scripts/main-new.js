@@ -165,7 +165,7 @@ class Controller {
     }
 
     handleHistoryEdit(event) {
-        if(event.target.matches(".previousTransactionAmount")) {
+        if(event.target.matches(this.dom.selectors.transactionAmountClass)) {
             const transaction = this.model.findTransaction(Number(event.target.id));
             View.moveToPage(this.dom.pages.transactionPage, this.pages, this.dom.classNames.activeClass);
             View.changeTransactionPageHeading(this.dom.pages.transactionPage, Controller.editMsg);
@@ -184,10 +184,10 @@ class Controller {
         const amountElement = document.createElement("div");
         const dateElement = document.createElement("div");
         const timeElement = document.createElement("div");
-        transactionElement.classList.add("previousTransaction");
+        transactionElement.classList.add(this.dom.classNames.transactionHistory);
         amountElement.id = transaction.id;
-        amountElement.classList.add("previousTransactionAmount");
-        timeElement.classList.add("previousTransactionTime");
+        amountElement.classList.add(this.dom.classNames.transactionAmount);
+        timeElement.classList.add(this.dom.classNames.transactionTime);
         if(transaction.type === "income") {
             amountElement.textContent = `+$${transaction.amount}`; 
         } else {
@@ -196,6 +196,7 @@ class Controller {
         if(transaction.date !== this.latestDate) {
             this.latestDate = transaction.date;
             const heading = document.createElement("p");
+            heading.classList.add(this.dom.classNames.transactionHistoryDateGroup);
             heading.textContent = `${transaction.dateLong}`;
             View.renderElement(this.dom.containers.transactionHistoryContainer, heading);
         }
@@ -342,10 +343,15 @@ const DOMReferences = {
     },
     selectors: {
         transactionHistoryClass: ".previousTransaction",
+        transactionAmountClass: ".previousTransactionAmount",
     }, 
     classNames: {
         activeClass: "active-page",
         errorClass: "errorMessage",
+        transactionHistory: "previousTransaction",
+        transactionHistoryDateGroup: "transactionHistoryDateGroup",
+        transactionAmount: "previousTransactionAmount",
+        transactionTime: "previousTransactionTime",
     }
 }
 const model = new Model();
