@@ -132,7 +132,7 @@ class Controller {
             }
             View.updateBalance(this.dom.fields.globalBalanceAmount, this.model.globalBalance);
             View.deleteTransaction(this.editedTransaction.id, this.dom.selectors.transactionHistoryClass);
-            model.deleteTransaction(this.editedTransaction.id);
+            this.model.deleteTransaction(this.editedTransaction.id);
             View.resetTransactionPage(this.dom.pages.transactionPage, this.dom.fields.transactionAmountField, this.dom.fields.transactionTypeField, Controller.createMsg);
             View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
             this.isCurrentlyEditing = false;
