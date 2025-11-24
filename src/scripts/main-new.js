@@ -131,7 +131,8 @@ class Controller {
                 return false;
             }
             View.updateBalance(this.dom.fields.globalBalanceAmount, this.model.globalBalance);
-            View.deleteTransaction(this.editedTransaction.id);
+            View.deleteTransaction(this.editedTransaction.id, this.dom.selectors.transactionHistoryClass);
+            model.deleteTransaction(this.editedTransaction.id);
             View.resetTransactionPage(this.dom.pages.transactionPage, this.dom.fields.transactionAmountField, this.dom.fields.transactionTypeField, Controller.createMsg);
             View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
             this.isCurrentlyEditing = false;
@@ -205,16 +206,12 @@ class View {
     }
 
     static resetTransactionPage(page, amountField, typeField, heading) {
-        console.log("resettpage");
-        console.log(heading);
         amountField.value = null;
         typeField.value = "income";
         page.querySelector("h2").textContent = heading;
     }
 
     static changeTransactionPageHeading(page, heading) {
-        console.log(page);
-        console.log(heading);
         page.querySelector("h2").textContent = heading;
     }
     
@@ -246,8 +243,7 @@ class View {
     }
 
     static deleteTransaction(id, className) {
-        document.getElementById(id).closest(className).style.display = "none";
-        document.getElementById(id).closest(className).hidden = true;
+        document.getElementById(id).closest(className).remove();
     }
 
     static editTransactionMessage(id, type, amount) {
@@ -296,6 +292,11 @@ class Model {
         } else {
             this.globalBalance -= newAmount;
         }
+    }
+
+    deleteTransaction(id) {
+        const updatedTransactions = this.transactions.filter(transaction => transaction.id !== id);
+        this.transactions = updatedTransactions;
     }
 }
 
