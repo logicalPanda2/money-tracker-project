@@ -6,7 +6,15 @@ class Transaction {
         this.type = type;
         this.amount = amount;
         this.date = null;
+        this.month = null;
+        this.year = null;
+        this.dateLong = null;
         this.time = null;
+        this.options = {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        }
 
         this.initializeDateAndTime();
         this.initializeId();
@@ -14,10 +22,13 @@ class Transaction {
 
     initializeDateAndTime() {
         const dateObj = new Date();
-        const date = `${dateObj.getMonth() + 1}/${dateObj.getDate()}/${dateObj.getFullYear()}`;
+        this.date = dateObj.getDate();
+        this.month = dateObj.getMonth() + 1;
+        this.year = dateObj.getFullYear();
+        const dateLong = dateObj.toLocaleString(undefined, this.options);
         const time = `${dateObj.getHours()}:${dateObj.getMinutes()}:${dateObj.getSeconds()}`;
         
-        this.date = date;
+        this.dateLong = dateLong;
         this.time = time;
     }
 
@@ -38,6 +49,7 @@ class Controller {
         this.handleHistoryEdit = this.handleHistoryEdit.bind(this);
         this.isCurrentlyEditing = false;
         this.editedTransaction = null;
+        this.latestDate = null;
     }
 
     static createMsg = "Add a new transaction";
@@ -175,18 +187,21 @@ class Controller {
         transactionElement.classList.add("previousTransaction");
         amountElement.id = transaction.id;
         amountElement.classList.add("previousTransactionAmount");
-        dateElement.classList.add("previousTransactionDate");
         timeElement.classList.add("previousTransactionTime");
         if(transaction.type === "income") {
             amountElement.textContent = `+$${transaction.amount}`; 
         } else {
             amountElement.textContent = `-$${transaction.amount}`;
         }
-        dateElement.textContent = transaction.date;
-        timeElement.textContent = transaction.time;
+        if(transaction.date !== this.latestDate) {
+            this.latestDate = transaction.date;
+            const heading = document.createElement("p");
+            heading.textContent = `${transaction.dateLong}`;
+            View.renderElement(this.dom.containers.transactionHistoryContainer, heading);
+        }
+        timeElement.textContent = transaction.time; // remove dateElement. change position of associated timeElement CSS class
         transactionElement.appendChild(amountElement);
-        transactionElement.appendChild(dateElement);
-        transactionElement.appendChild(timeElement);
+        transactionElement.appendChild(timeElement); 
         View.renderElement(this.dom.containers.transactionHistoryContainer, transactionElement);
     }
 }
