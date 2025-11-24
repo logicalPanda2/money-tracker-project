@@ -188,9 +188,8 @@ class Controller {
     }
 
     createTransactionHistory(transaction) {
-        const transactionElement = document.createElement("button");
-        const amountElement = document.createElement("div");
-        const dateElement = document.createElement("div");
+        const transactionElement = document.createElement("div");
+        const amountElement = document.createElement("button");
         const timeElement = document.createElement("div");
         transactionElement.classList.add(this.dom.classNames.transactionHistory);
         amountElement.id = transaction.id;
