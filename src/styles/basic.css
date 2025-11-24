@@ -189,7 +189,6 @@ main {
 }
 
 .transactionHistory {
-    margin-top: var(--semantic-spacing-large);
     width: 400px;
 }
 
@@ -214,17 +213,10 @@ main {
     text-align: left;
 }
 
-.previousTransactionDate {
-    font-size: var(--font-size-extra-small);
-    position: absolute;
-    top: var(--decorative-spacing-extra-small);
-    right: var(--decorative-spacing-small);
-}
-
 .previousTransactionTime {
     font-size: var(--font-size-extra-small);
     position: absolute;
-    bottom: var(--decorative-spacing-extra-small);
+    top: var(--decorative-spacing-extra-small);
     right: var(--decorative-spacing-small);
 }
 
@@ -238,4 +230,10 @@ main {
     color: var(--error-color);
     margin-bottom: var(--decorative-spacing-small);
     font-weight: 500;
+}
+
+.transactionHistoryDateGroup {
+    font-size: clamp(var(--font-size-half-medium), 2vw, var(--font-size-large));
+    font-weight: 400;
+    margin: var(--semantic-spacing-standard) 0;
 }

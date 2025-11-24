@@ -200,7 +200,7 @@ class Controller {
             heading.textContent = `${transaction.dateLong}`;
             View.renderElement(this.dom.containers.transactionHistoryContainer, heading);
         }
-        timeElement.textContent = transaction.time; // remove dateElement. change position of associated timeElement CSS class
+        timeElement.textContent = transaction.time;
         transactionElement.appendChild(amountElement);
         transactionElement.appendChild(timeElement); 
         View.renderElement(this.dom.containers.transactionHistoryContainer, transactionElement);
