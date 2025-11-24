@@ -91,13 +91,15 @@ class Controller {
     static handleConfirm() {
         View.removeErrors();
         if(Controller.isCurrentlyEditing) {
+            const temp = Model.globalBalance;
             const oldAmount = Controller.editedTransaction.amount;
             const oldType = Controller.editedTransaction.type;
             const newAmount = Number(DOMReferences.transactionAmountField.value);
             const newType = DOMReferences.transactionTypeField.value;
-            const errStatus = Model.editBalance(oldType, newType, oldAmount, newAmount);
-            if(!errStatus) {
+            Model.editBalance(oldType, newType, oldAmount, newAmount);
+            if(Model.globalBalance < 0) {
                 View.displayError(Controller.overSpendingErrorMsg);
+                Model.globalBalance = temp;
             } else {
                 View.editTransactionMessage(Controller.editedTransaction.id, newType, newAmount);
                 View.updateBalance(Model.globalBalance);
@@ -287,27 +289,16 @@ class Model {
     }
 
     static editBalance(oldType, newType, oldAmount, newAmount) {
-        const amountDifference = oldAmount - newAmount;
-        if(newType === "income") {
-            if(newType !== oldType) {
-                Model.globalBalance += (newAmount + oldAmount);
-            } else {
-                Model.globalBalance -= amountDifference;
-            }
+        if(oldType === "income") {
+            Model.globalBalance -= oldAmount;
         } else {
-            const temp = Model.globalBalance;
-            if(newType !== oldType) {
-                Model.globalBalance -= (newAmount + oldAmount);
-            } else {
-                Model.globalBalance += amountDifference;
-            }
-            if(Model.globalBalance < 0) {
-                Model.globalBalance = temp;
-                return false;
-            }
+            Model.globalBalance += oldAmount;
         }
-
-        return true;
+        if(newType === "income") {
+            Model.globalBalance += newAmount;
+        } else {
+            Model.globalBalance -= newAmount;
+        }
     }
 }
 
