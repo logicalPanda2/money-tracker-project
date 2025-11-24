@@ -8,6 +8,9 @@ class Transaction {
         this.date = null;
         this.month = null;
         this.year = null;
+        this.hour = null;
+        this.minutes = null;
+        this.seconds = null;
         this.dateLong = null;
         this.time = null;
         this.options = {
@@ -25,8 +28,13 @@ class Transaction {
         this.date = dateObj.getDate();
         this.month = dateObj.getMonth() + 1;
         this.year = dateObj.getFullYear();
+        this.hour = dateObj.getHours();
+        this.minutes = dateObj.getMinutes();
+        this.seconds = dateObj.getSeconds();
+        const paddedHour = String(this.hour).padStart(2, "0");
+        const paddedMinutes = String(this.minutes).padStart(2, "0");
         const dateLong = dateObj.toLocaleString(undefined, this.options);
-        const time = `${dateObj.getHours()}:${dateObj.getMinutes()}:${dateObj.getSeconds()}`;
+        const time = `${paddedHour}:${paddedMinutes}`;
         
         this.dateLong = dateLong;
         this.time = time;
