@@ -196,9 +196,6 @@ main {
     height: 3rem;
     width: 90%;
     padding: 0;
-    background-color: var(--bg-default);
-    border: var(--border-thin);
-    border-radius: var(--border-radius-standard);
     position: relative;
     margin-bottom: var(--decorative-spacing-standard);
     display: flex;
@@ -210,6 +207,9 @@ main {
     font-weight: 500;
     width: 100%;
     padding: var(--decorative-spacing-small);
+    background-color: var(--bg-default);
+    border: var(--border-thin);
+    border-radius: var(--border-radius-standard);
     text-align: left;
 }
 
