@@ -34,8 +34,8 @@ class Transaction {
 
     initializeDateAndTime() {
         const dateObj = new Date();
-        const date = `${dateObj.getMonth().toString()}/${dateObj.getDate().toString()}/${dateObj.getFullYear().toString()}`;
-        const time = `${dateObj.getHours().toString()}:${dateObj.getMinutes().toString()}:${dateObj.getSeconds().toString()}`;
+        const date = `${dateObj.getMonth() + 1}/${dateObj.getDate()}/${dateObj.getFullYear()}`;
+        const time = `${dateObj.getHours()}:${dateObj.getMinutes()}:${dateObj.getSeconds()}`;
         
         this.date = date;
         this.time = time;
