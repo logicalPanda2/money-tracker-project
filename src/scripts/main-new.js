@@ -1,23 +1,3 @@
-class DOMReferences {
-    static homePage = document.getElementById("homePage");
-    static transactionPage = document.getElementById("transactionPage");
-    static historyPage = document.getElementById("historyPage");
-    static transactionBtn = document.getElementById("transactionBtn");
-    static historyBtn = document.getElementById("historyBtn");
-    static closeTransactionBtn = document.getElementById("closeTransactionBtn");
-    static closeHistoryBtn = document.getElementById("closeHistoryBtn");
-    static confirmBtn = document.getElementById("confirmBtn");
-    static deleteBtn = document.getElementById("deleteBtn");
-    static globalBalanceAmount = document.getElementById("globalBalanceAmount");
-    static transactionTypeField = document.getElementById("transactionTypeField");
-    static transactionAmountField = document.getElementById("transactionAmountField");
-    static transactionHistory = document.getElementById("transactionHistory");
-    static errorMessageContainer = document.getElementById("errorMessageContainer");
-
-    static pages = [homePage, transactionPage, historyPage];
-    static buttons = [closeHistoryBtn, transactionBtn, historyBtn];
-}
-
 class Transaction {
     static id = 0;
 
@@ -48,8 +28,17 @@ class Transaction {
 }
 
 class Controller {
-    static isCurrentlyEditing = false;
-    static editedTransaction = null;
+    constructor(dom) {
+        this.dom = dom;
+        this.handleConfirm = this.handleConfirm.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleHistoryEdit = this.handleHistoryEdit.bind(this);
+        this.pages = Object.values(this.dom.pages);
+        this.isCurrentlyEditing = false;
+        this.editedTransaction = null;
+    }
+
     static createMsg = "Add a new transaction";
     static editMsg = "Edit a transaction";
     static incorrectDeletionErrorMsg = "Cannot delete outside transaction editor:Press the close button to close this page";
@@ -57,20 +46,21 @@ class Controller {
     static overSpendingDeletionErrorMsg = "Cannot delete:Balance cannot be less than 0";
     static incorrectSyntaxErrorMsg = "Amount must be a number:Amount must be at least 1";
 
-    static initializeEventListeners() {
-        DOMReferences.buttons.forEach((button, index) => {
+    initializeEventListeners() {
+        const btns = Object.values(this.dom.pageButtons);
+        btns.forEach((button, index) => {
             button.onclick = () => {
-                View.moveToPage(DOMReferences.pages[index]);
+                View.moveToPage(this.pages[index], this.pages, this.dom.classNames.activeClass);
             }
         });
 
-        DOMReferences.confirmBtn.addEventListener("click", Controller.handleConfirm);
-        DOMReferences.deleteBtn.addEventListener("click", Controller.handleDelete);
-        DOMReferences.closeTransactionBtn.addEventListener("click", Controller.handleClose);
-        DOMReferences.transactionHistory.addEventListener("click", Controller.handleHistoryEdit);
+        this.dom.editingButtons.confirmBtn.addEventListener("click", this.handleConfirm);
+        this.dom.editingButtons.deleteBtn.addEventListener("click", this.handleDelete);
+        this.dom.editingButtons.closeTransactionBtn.addEventListener("click", this.handleClose);
+        this.dom.containers.transactionHistoryContainer.addEventListener("click", this.handleHistoryEdit);
     }
 
-    static validateTransaction(type, amount) {
+    validateTransaction(type, amount) {
         const errorObject = {
             isValid: true,
             message: "",
@@ -88,94 +78,94 @@ class Controller {
         return errorObject;
     }
 
-    static handleConfirm() {
-        View.removeErrors();
-        if(Controller.isCurrentlyEditing) {
+    handleConfirm() {
+        View.removeErrors(this.dom.containers.errorMessageContainer);
+        if(this.isCurrentlyEditing) {
             const temp = Model.globalBalance;
-            const oldAmount = Controller.editedTransaction.amount;
-            const oldType = Controller.editedTransaction.type;
-            const newAmount = Number(DOMReferences.transactionAmountField.value);
-            const newType = DOMReferences.transactionTypeField.value;
+            const oldAmount = this.editedTransaction.amount;
+            const oldType = this.editedTransaction.type;
+            const newAmount = Number(this.dom.fields.transactionAmountField.value);
+            const newType = this.dom.fields.transactionTypeField.value;
             Model.editBalance(oldType, newType, oldAmount, newAmount);
             if(Model.globalBalance < 0) {
-                View.displayError(Controller.overSpendingErrorMsg);
+                View.displayError(this.dom.containers.errorMessageContainer, Controller.overSpendingErrorMsg, this.dom.classNames.errorClass);
                 Model.globalBalance = temp;
             } else {
-                View.editTransactionMessage(Controller.editedTransaction.id, newType, newAmount);
-                View.updateBalance(Model.globalBalance);
-                View.resetTransactionPage();
-                View.moveToPage(DOMReferences.homePage);
-                Controller.editedTransaction.type = newType;
-                Controller.editedTransaction.amount = newAmount;
-                Controller.isCurrentlyEditing = false;
-                Controller.editedTransaction = null;
+                View.editTransactionMessage(this.editedTransaction.id, newType, newAmount);
+                View.updateBalance(this.dom.fields.globalBalanceAmount, Model.globalBalance);
+                View.resetTransactionPage(this.dom.pages.transactionPage, this.dom.fields.transactionAmountField, this.dom.fields.transactionTypeField, Controller.createMsg);
+                View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
+                this.editedTransaction.type = newType;
+                this.editedTransaction.amount = newAmount;
+                this.isCurrentlyEditing = false;
+                this.editedTransaction = null;
             }
         } else {
-            const type = DOMReferences.transactionTypeField.value;
-            const amount = Number(DOMReferences.transactionAmountField.value);
-            const errorObject = Controller.validateTransaction(type, amount);
+            const type = this.dom.fields.transactionTypeField.value;
+            const amount = Number(this.dom.fields.transactionAmountField.value);
+            const errorObject = this.validateTransaction(type, amount);
             if(!errorObject.isValid) {
-                View.displayError(errorObject.message);
+                View.displayError(this.dom.containers.errorMessageContainer, errorObject.message, this.dom.classNames.errorClass);
                 return false;
             }
             const transaction = new Transaction(type, amount);
-            Controller.createTransactionHistory(transaction);
+            this.createTransactionHistory(transaction);
             Model.transactions.push(transaction);
             Model.updateBalance(transaction);
-            View.updateBalance(Model.globalBalance);
-            View.resetTransactionPage();
-            View.moveToPage(DOMReferences.homePage);
+            View.updateBalance(this.dom.fields.globalBalanceAmount, Model.globalBalance);
+            View.resetTransactionPage(this.dom.pages.transactionPage, this.dom.fields.transactionAmountField, this.dom.fields.transactionTypeField, Controller.createMsg);
+            View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
         }
     }
 
-    static handleDelete() {
-        View.removeErrors();
-        if(Controller.isCurrentlyEditing) {
+    handleDelete() {
+        View.removeErrors(this.dom.containers.errorMessageContainer);
+        if(this.isCurrentlyEditing) {
             const temp = Model.globalBalance;
-            Model.revertBalance(Controller.editedTransaction);
+            Model.revertBalance(this.editedTransaction);
             if(Model.globalBalance < 0) {
                 Model.globalBalance = temp;
-                View.displayError(Controller.overSpendingDeletionErrorMsg);
-                View.updateBalance(Model.globalBalance);
+                View.displayError(this.dom.containers.errorMessageContainer, Controller.overSpendingDeletionErrorMsg, this.dom.classNames.errorClass);
+                View.updateBalance(this.dom.fields.globalBalanceAmount, Model.globalBalance);
                 return false;
             }
-            View.updateBalance(Model.globalBalance);
-            View.deleteTransaction(Controller.editedTransaction.id);
-            View.resetTransactionPage();
-            View.moveToPage(DOMReferences.homePage);
-            Controller.isCurrentlyEditing = false;
-            Controller.editedTransaction = null;
+            View.updateBalance(this.dom.fields.globalBalanceAmount, Model.globalBalance);
+            View.deleteTransaction(this.editedTransaction.id);
+            View.resetTransactionPage(this.dom.pages.transactionPage, this.dom.fields.transactionAmountField, this.dom.fields.transactionTypeField, Controller.createMsg);
+            View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
+            this.isCurrentlyEditing = false;
+            this.editedTransaction = null;
         } else {
-            View.displayError(Controller.incorrectDeletionErrorMsg);
+            View.displayError(this.dom.containers.errorMessageContainer, Controller.incorrectDeletionErrorMsg, this.dom.classNames.errorClass);
         }
     }
 
-    static handleClose() {
-        if(Controller.isCurrentlyEditing) {
-            Controller.isCurrentlyEditing = false;
-            Controller.editedTransaction = null;
+    handleClose() {
+        if(this.isCurrentlyEditing) {
+            this.isCurrentlyEditing = false;
+            this.editedTransaction = null;
         }
-        View.removeErrors();
-        View.resetTransactionPage();
-        View.moveToPage(DOMReferences.homePage);
+        View.removeErrors(this.dom.containers.errorMessageContainer);
+        View.resetTransactionPage(this.dom.pages.transactionPage, this.dom.fields.transactionAmountField, this.dom.fields.transactionTypeField, Controller.createMsg);
+        View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
     }
 
-    static handleHistoryEdit(event) {
+    handleHistoryEdit(event) {
         if(event.target.matches(".previousTransactionAmount")) {
             const transaction = Model.findTransaction(Number(event.target.id));
-            View.moveToPage(DOMReferences.transactionPage);
-            View.changeTransactionPageHeading(Controller.editMsg);
-            DOMReferences.transactionTypeField.value = transaction.type;
-            DOMReferences.transactionAmountField.value = transaction.amount;
+            View.moveToPage(this.dom.pages.transactionPage, this.pages, this.dom.classNames.activeClass);
+            View.changeTransactionPageHeading(this.dom.pages.transactionPage, Controller.editMsg);
+            this.dom.fields.transactionTypeField.value = transaction.type;
+            this.dom.fields.transactionAmountField.value = transaction.amount;
 
-            Controller.isCurrentlyEditing = true;
-            Controller.editedTransaction = transaction;
+            this.isCurrentlyEditing = true;
+            this.editedTransaction = transaction;
         } else {
             return false;
         }
     }
 
-    static createTransactionHistory(transaction) {
+    createTransactionHistory(transaction) {
         const transactionElement = document.createElement("button");
         const amountElement = document.createElement("div");
         const dateElement = document.createElement("div");
@@ -195,64 +185,68 @@ class Controller {
         transactionElement.appendChild(amountElement);
         transactionElement.appendChild(dateElement);
         transactionElement.appendChild(timeElement);
-        View.renderElement(DOMReferences.transactionHistory, transactionElement);
+        View.renderElement(this.dom.containers.transactionHistoryContainer, transactionElement);
     }
 }
 
 class View {
-    static moveToPage(page) {
-        View.removeAll("active-page");
-        page.classList.add("active-page");
-        page.inert = false;
+    static moveToPage(targetPage, pages, className) {
+        View.removeAll(pages, className);
+        targetPage.classList.add(className);
+        targetPage.inert = false;
     }
 
-    static removeAll(className) {
-        DOMReferences.pages.forEach(page => {
+    static removeAll(pages, className) {
+        pages.forEach(page => {
             page.classList.remove(className);
             page.inert = true;
         });
     }
 
-    static resetTransactionPage() {
-        DOMReferences.transactionAmountField.value = null;
-        DOMReferences.transactionTypeField.value = "income";
-        DOMReferences.transactionPage.querySelector("h2").textContent = "Add a new transaction";
+    static resetTransactionPage(page, amountField, typeField, heading) {
+        console.log("resettpage");
+        console.log(heading);
+        amountField.value = null;
+        typeField.value = "income";
+        page.querySelector("h2").textContent = heading;
     }
 
-    static changeTransactionPageHeading(message) {
-        DOMReferences.transactionPage.querySelector("h2").textContent = message;
+    static changeTransactionPageHeading(page, heading) {
+        console.log(page);
+        console.log(heading);
+        page.querySelector("h2").textContent = heading;
     }
     
-    static updateBalance(balance) {
-        DOMReferences.globalBalanceAmount.textContent = `Balance: $${balance}`;
+    static updateBalance(balanceElement, balance) {
+        balanceElement.textContent = `Balance: $${balance}`;
     }
 
-    static displayError(messages) {
-        DOMReferences.errorMessageContainer.textContent = null;
-        DOMReferences.errorMessageContainer.style.display = "block";
-        DOMReferences.errorMessageContainer.hidden = false;
+    static displayError(errorContainer, messages, errorClass) {
+        errorContainer.textContent = null;
+        errorContainer.style.display = "block";
+        errorContainer.hidden = false;
         const messagesArr = messages.split(":");
         messagesArr.forEach(message => {
             const errorMessage = document.createElement("p");
-            errorMessage.classList.add("errorMessage");
+            errorMessage.classList.add(errorClass);
             errorMessage.textContent = message;
-            this.renderElement(DOMReferences.errorMessageContainer, errorMessage);
+            this.renderElement(errorContainer, errorMessage);
         })
     }
 
-    static removeErrors() {
-        DOMReferences.errorMessageContainer.style.display = "none";
-        DOMReferences.errorMessageContainer.hidden = true;
-        DOMReferences.errorMessageContainer.textContent = null;
+    static removeErrors(errorContainer) {
+        errorContainer.style.display = "none";
+        errorContainer.hidden = true;
+        errorContainer.textContent = null;
     }
 
     static renderElement(parent, child) {
         parent.appendChild(child);
     }
 
-    static deleteTransaction(id) {
-        document.getElementById(id).closest(".previousTransaction").style.display = "none";
-        document.getElementById(id).closest(".previousTransaction").hidden = true;
+    static deleteTransaction(id, className) {
+        document.getElementById(id).closest(className).style.display = "none";
+        document.getElementById(id).closest(className).hidden = true;
     }
 
     static editTransactionMessage(id, type, amount) {
@@ -302,4 +296,39 @@ class Model {
     }
 }
 
-Controller.initializeEventListeners();
+const DOMReferences = {
+    pages: {
+        homePage: document.getElementById("homePage"),
+        transactionPage: document.getElementById("transactionPage"),
+        historyPage: document.getElementById("historyPage"),
+    },
+    pageButtons: {
+        closeHistoryBtn: document.getElementById("closeHistoryBtn"),
+        transactionBtn: document.getElementById("transactionBtn"),
+        historyBtn: document.getElementById("historyBtn"),
+    },
+    editingButtons: {
+        closeTransactionBtn: document.getElementById("closeTransactionBtn"),
+        confirmBtn: document.getElementById("confirmBtn"),
+        deleteBtn: document.getElementById("deleteBtn"),
+    },
+    fields: {
+        globalBalanceAmount: document.getElementById("globalBalanceAmount"),
+        transactionTypeField: document.getElementById("transactionTypeField"),
+        transactionAmountField: document.getElementById("transactionAmountField"),
+    },
+    containers: {
+        transactionHistoryContainer: document.getElementById("transactionHistory"),
+        errorMessageContainer: document.getElementById("errorMessageContainer"),
+    },
+    selectors: {
+        transactionHistoryClass: ".previousTransaction",
+    }, 
+    classNames: {
+        activeClass: "active-page",
+        errorClass: "errorMessage",
+    }
+}
+
+const controller = new Controller(DOMReferences);
+controller.initializeEventListeners();
