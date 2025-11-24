@@ -28,13 +28,14 @@ class Transaction {
 }
 
 class Controller {
-    constructor(dom) {
+    constructor(dom, model) {
         this.dom = dom;
+        this.model = model;
+        this.pages = Object.values(this.dom.pages);
         this.handleConfirm = this.handleConfirm.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleHistoryEdit = this.handleHistoryEdit.bind(this);
-        this.pages = Object.values(this.dom.pages);
         this.isCurrentlyEditing = false;
         this.editedTransaction = null;
     }
@@ -70,7 +71,7 @@ class Controller {
             errorObject.message = Controller.incorrectSyntaxErrorMsg;
             errorObject.isValid = false;
         }
-        if(type === "expense" && amount > Model.globalBalance) {
+        if(type === "expense" && amount > this.model.globalBalance) {
             errorObject.message = Controller.overSpendingErrorMsg;
             errorObject.isValid = false;
         }
@@ -81,18 +82,18 @@ class Controller {
     handleConfirm() {
         View.removeErrors(this.dom.containers.errorMessageContainer);
         if(this.isCurrentlyEditing) {
-            const temp = Model.globalBalance;
+            const temp = this.model.globalBalance;
             const oldAmount = this.editedTransaction.amount;
             const oldType = this.editedTransaction.type;
             const newAmount = Number(this.dom.fields.transactionAmountField.value);
             const newType = this.dom.fields.transactionTypeField.value;
-            Model.editBalance(oldType, newType, oldAmount, newAmount);
-            if(Model.globalBalance < 0) {
+            this.model.editBalance(oldType, newType, oldAmount, newAmount);
+            if(this.model.globalBalance < 0) {
                 View.displayError(this.dom.containers.errorMessageContainer, Controller.overSpendingErrorMsg, this.dom.classNames.errorClass);
-                Model.globalBalance = temp;
+                this.model.globalBalance = temp;
             } else {
                 View.editTransactionMessage(this.editedTransaction.id, newType, newAmount);
-                View.updateBalance(this.dom.fields.globalBalanceAmount, Model.globalBalance);
+                View.updateBalance(this.dom.fields.globalBalanceAmount, this.model.globalBalance);
                 View.resetTransactionPage(this.dom.pages.transactionPage, this.dom.fields.transactionAmountField, this.dom.fields.transactionTypeField, Controller.createMsg);
                 View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
                 this.editedTransaction.type = newType;
@@ -110,9 +111,9 @@ class Controller {
             }
             const transaction = new Transaction(type, amount);
             this.createTransactionHistory(transaction);
-            Model.transactions.push(transaction);
-            Model.updateBalance(transaction);
-            View.updateBalance(this.dom.fields.globalBalanceAmount, Model.globalBalance);
+            this.model.transactions.push(transaction);
+            this.model.updateBalance(transaction);
+            View.updateBalance(this.dom.fields.globalBalanceAmount, this.model.globalBalance);
             View.resetTransactionPage(this.dom.pages.transactionPage, this.dom.fields.transactionAmountField, this.dom.fields.transactionTypeField, Controller.createMsg);
             View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
         }
@@ -121,15 +122,15 @@ class Controller {
     handleDelete() {
         View.removeErrors(this.dom.containers.errorMessageContainer);
         if(this.isCurrentlyEditing) {
-            const temp = Model.globalBalance;
-            Model.revertBalance(this.editedTransaction);
-            if(Model.globalBalance < 0) {
-                Model.globalBalance = temp;
+            const temp = this.model.globalBalance;
+            this.model.revertBalance(this.editedTransaction);
+            if(this.model.globalBalance < 0) {
+                this.model.globalBalance = temp;
                 View.displayError(this.dom.containers.errorMessageContainer, Controller.overSpendingDeletionErrorMsg, this.dom.classNames.errorClass);
-                View.updateBalance(this.dom.fields.globalBalanceAmount, Model.globalBalance);
+                View.updateBalance(this.dom.fields.globalBalanceAmount, this.model.globalBalance);
                 return false;
             }
-            View.updateBalance(this.dom.fields.globalBalanceAmount, Model.globalBalance);
+            View.updateBalance(this.dom.fields.globalBalanceAmount, this.model.globalBalance);
             View.deleteTransaction(this.editedTransaction.id);
             View.resetTransactionPage(this.dom.pages.transactionPage, this.dom.fields.transactionAmountField, this.dom.fields.transactionTypeField, Controller.createMsg);
             View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
@@ -152,7 +153,7 @@ class Controller {
 
     handleHistoryEdit(event) {
         if(event.target.matches(".previousTransactionAmount")) {
-            const transaction = Model.findTransaction(Number(event.target.id));
+            const transaction = this.model.findTransaction(Number(event.target.id));
             View.moveToPage(this.dom.pages.transactionPage, this.pages, this.dom.classNames.activeClass);
             View.changeTransactionPageHeading(this.dom.pages.transactionPage, Controller.editMsg);
             this.dom.fields.transactionTypeField.value = transaction.type;
@@ -259,39 +260,41 @@ class View {
 }
 
 class Model {
-    static transactions = [];
-    static globalBalance = 0;
+    constructor() {
+        this.transactions = [];
+        this.globalBalance = 0;
+    }
 
-    static updateBalance(transaction) {
+    updateBalance(transaction) {
         if(transaction.type === "income") {
-            Model.globalBalance += transaction.amount;
+            this.globalBalance += transaction.amount;
         } else {
-            Model.globalBalance -= transaction.amount;
+            this.globalBalance -= transaction.amount;
         }
     }
 
-    static revertBalance(transaction) {
+    revertBalance(transaction) {
         if(transaction.type === "income") {
-            Model.globalBalance -= transaction.amount;
+            this.globalBalance -= transaction.amount;
         } else {
-            Model.globalBalance += transaction.amount;
+            this.globalBalance += transaction.amount;
         }
     }
 
-    static findTransaction(id) {
-        return Model.transactions.find(object => object.id === id);
+    findTransaction(id) {
+        return this.transactions.find(object => object.id === id);
     }
 
-    static editBalance(oldType, newType, oldAmount, newAmount) {
+    editBalance(oldType, newType, oldAmount, newAmount) {
         if(oldType === "income") {
-            Model.globalBalance -= oldAmount;
+            this.globalBalance -= oldAmount;
         } else {
-            Model.globalBalance += oldAmount;
+            this.globalBalance += oldAmount;
         }
         if(newType === "income") {
-            Model.globalBalance += newAmount;
+            this.globalBalance += newAmount;
         } else {
-            Model.globalBalance -= newAmount;
+            this.globalBalance -= newAmount;
         }
     }
 }
@@ -329,6 +332,7 @@ const DOMReferences = {
         errorClass: "errorMessage",
     }
 }
+const model = new Model();
+const controller = new Controller(DOMReferences, model);
 
-const controller = new Controller(DOMReferences);
 controller.initializeEventListeners();
