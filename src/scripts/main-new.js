@@ -55,12 +55,15 @@ class Controller {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleHistoryEdit = this.handleHistoryEdit.bind(this);
+        this.handleManualUpdate = this.handleManualUpdate.bind(this);
+        this.handleManualUpdateClose = this.handleManualUpdateClose.bind(this);
         this.isCurrentlyEditing = false;
         this.editedTransaction = null;
         this.latestDate = null;
     }
 
     static createMsg = "Add a new transaction";
+    static manualUpdateMsg = "Update balance manually";
     static editMsg = "Edit a transaction";
     static incorrectDeletionErrorMsg = "Cannot delete outside transaction editor:Press the close button to close this page";
     static overSpendingErrorMsg = "Cannot spend more than current balance";
@@ -76,8 +79,10 @@ class Controller {
         });
 
         this.dom.editingButtons.confirmBtn.addEventListener("click", this.handleConfirm);
+        this.dom.editingButtons.manualUpdateConfirmBtn.addEventListener("click", this.handleManualUpdate);
         this.dom.editingButtons.deleteBtn.addEventListener("click", this.handleDelete);
         this.dom.editingButtons.closeTransactionBtn.addEventListener("click", this.handleClose);
+        this.dom.editingButtons.closeManualUpdateBtn.addEventListener("click", this.handleManualUpdateClose);
         this.dom.containers.transactionHistoryContainer.addEventListener("click", this.handleHistoryEdit);
     }
 
@@ -185,6 +190,27 @@ class Controller {
         } else {
             return false;
         }
+    }
+
+    handleManualUpdate() {
+        const type = this.dom.fields.manualUpdateTypeField.value;
+        const amount = Number(this.dom.fields.manualUpdateAmountField.value);
+        const errorObject = this.validateTransaction(type, amount);
+        if(!errorObject.isValid) {
+            View.displayError(this.dom.containers.manualUpdateErrorMessageContainer, errorObject.message, this.dom.classNames.errorClass);
+            return false;
+        }
+        const transaction = new Transaction(type, amount);
+        this.model.updateBalance(transaction);
+        View.updateBalance(this.dom.fields.globalBalanceAmount, this.model.globalBalance);
+        View.resetTransactionPage(this.dom.pages.transactionPage, this.dom.fields.transactionAmountField, this.dom.fields.transactionTypeField, Controller.createMsg);
+        View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
+    }
+
+    handleManualUpdateClose() {
+        View.removeErrors(this.dom.containers.errorMessageContainer);
+        View.resetTransactionPage(this.dom.pages.manualUpdatePage, this.dom.fields.manualUpdateAmountField, this.dom.fields.manualUpdateTypeField, Controller.manualUpdateMsg);
+        View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
     }
 
     createTransactionHistory(transaction) {
@@ -328,25 +354,32 @@ const DOMReferences = {
         homePage: document.getElementById("homePage"),
         transactionPage: document.getElementById("transactionPage"),
         historyPage: document.getElementById("historyPage"),
+        manualUpdatePage: document.getElementById("manualUpdatePage"),
     },
     pageButtons: {
         closeHistoryBtn: document.getElementById("closeHistoryBtn"),
         transactionBtn: document.getElementById("transactionBtn"),
         historyBtn: document.getElementById("historyBtn"),
+        manualUpdateBtn: document.getElementById("manualUpdateBtn"),
     },
     editingButtons: {
         closeTransactionBtn: document.getElementById("closeTransactionBtn"),
         confirmBtn: document.getElementById("confirmBtn"),
         deleteBtn: document.getElementById("deleteBtn"),
+        manualUpdateConfirmBtn: document.getElementById("manualUpdateConfirmBtn"),
+        closeManualUpdateBtn: document.getElementById("closeManualUpdateBtn"),
     },
     fields: {
         globalBalanceAmount: document.getElementById("globalBalanceAmount"),
         transactionTypeField: document.getElementById("transactionTypeField"),
         transactionAmountField: document.getElementById("transactionAmountField"),
+        manualUpdateTypeField: document.getElementById("manualUpdateTypeField"),
+        manualUpdateAmountField: document.getElementById("manualUpdateAmountField"),
     },
     containers: {
         transactionHistoryContainer: document.getElementById("transactionHistory"),
         errorMessageContainer: document.getElementById("errorMessageContainer"),
+        manualUpdateErrorMessageContainer: document.getElementById("manualUpdateErrorMessageContainer"),
     },
     selectors: {
         transactionHistoryClass: ".previousTransaction",
