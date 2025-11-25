@@ -104,8 +104,8 @@ main {
 }
 
 .transactionBtn, .manualUpdateBtn {
-    height: 3.25rem;
-    width: 10rem;
+    height: 2.5rem;
+    width: 13rem;
     background-color: var(--accent-color);
     padding: var(--decorative-spacing-standard);
     border: var(--border-thin);
