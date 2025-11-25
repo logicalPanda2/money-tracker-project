@@ -194,11 +194,13 @@ main {
 
 .transactionHistory {
     width: 400px;
+    max-width: 90%;
 }
 
 .previousTransaction {
     height: 3rem;
     width: 90%;
+    max-width: 90%;
     padding: 0;
     position: relative;
     margin-bottom: var(--decorative-spacing-standard);
