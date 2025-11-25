@@ -54,6 +54,13 @@
                     <h2>Update balance manually</h2>
                 </header>
                 <div class="manualUpdateDetails">
+                    <label for="manualUpdateTypeField">Type:</label>
+                    <div class="selectWrapper">
+                        <select name="manualUpdateType" id="manualUpdateTypeField">
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
+                        </select>
+                    </div>
                     <label for="manualUpdateAmountField">Amount:</label>
                     <input type="text" name="manualUpdateAmount" id="manualUpdateAmountField">
                     <button id="manualUpdateConfirmBtn" class="manualUpdateConfirmBtn">Confirm</button>
