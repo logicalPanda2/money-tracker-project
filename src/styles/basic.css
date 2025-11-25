@@ -59,7 +59,7 @@ h1 {
     margin: var(--semantic-spacing-standard) 0 var(--semantic-spacing-standard) var(--decorative-spacing-large);
 }
 
-.transactionPage h2 {
+.transactionPage h2, .manualUpdatePage h2 {
     max-width: 75%;
 }
 
@@ -97,7 +97,7 @@ main {
     z-index: 2;
 }
 
-.homePage, .transactionPage, .historyPage {
+.homePage, .transactionPage, .historyPage, .manualUpdatePage {
     width: 100%;
     padding: var(--decorative-spacing-large);
     padding-right: 0;
@@ -118,13 +118,13 @@ main {
     transition: background-color 200ms ease-in;
 }
 
-.transactionDetails {
+.transactionDetails, .manualUpdateDetails {
     width: clamp(10%, 20rem, 90%);
     display: flex;
     flex-direction: column;
 }
 
-.transactionDetails label {
+.transactionDetails label, .manualUpdateDetails label {
     margin: var(--semantic-spacing-standard) 0 var(--decorative-spacing-small) 0;
 }
 
@@ -139,7 +139,7 @@ main {
     outline: none;
 }
 
-.transactionDetails input, .selectWrapper {
+.transactionDetails input, .selectWrapper, .manualUpdateDetails input {
     padding: var(--decorative-spacing-small);
     width: 90%;
     border: var(--border-thin);
@@ -158,13 +158,17 @@ main {
     margin-top: var(--semantic-spacing-standard);
 }
 
-.confirmBtn, .deleteBtn {
+.confirmBtn, .deleteBtn, .manualUpdateConfirmBtn {
     width: 6rem;
     height: 2.25rem;
     background-color: var(--accent-color);
     border: var(--border-thin);
     border-radius: var(--border-radius-standard);
     transition: background-color 200ms ease-in;
+}
+
+.manualUpdateConfirmBtn {
+    margin-top: var(--semantic-spacing-standard);
 }
 
 .deleteBtn {

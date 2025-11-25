@@ -7,7 +7,7 @@
     background-color: var(--accent-color-hover);
 }
 
-.confirmBtn:hover {
+.confirmBtn:hover, .manualUpdateConfirmBtn:hover {
     background-color: var(--accent-color-hover);
 }
 

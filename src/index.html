@@ -13,7 +13,7 @@
                 <h1>Money Tracker</h1>
                 <button id="historyBtn" class="historyBtn"><img src="assets/history-icon.webp" alt="History" width="40" height="40"></button>
             </header>
-            <section id="homePage" class="page homePage active-page">
+            <section id="homePage" class="page homePage" inert>
                 <header>
                     <p id="globalBalanceAmount">Balance: $0</p>
                 </header>
@@ -24,14 +24,14 @@
                     <h2>Add a new transaction</h2>
                 </header>
                 <div class="transactionDetails">
-                    <label for="transactionType">Type:</label>
+                    <label for="transactionTypeField">Type:</label>
                     <div class="selectWrapper">
                         <select name="transactionType" id="transactionTypeField">
                             <option value="income">Income</option>
                             <option value="expense">Expense</option>
                         </select>
                     </div>
-                    <label for="transactionAmount">Amount:</label>
+                    <label for="transactionAmountField">Amount:</label>
                     <input type="text" name="transactionAmount" id="transactionAmountField">
                 </div>
                 <div class="transactionBtns">
@@ -47,6 +47,17 @@
                 </header>
                 <div id="transactionHistory" class="transactionHistory"></div>
                 <button id="closeHistoryBtn" class="closePageBtn"><img src="assets/close-icon.webp" alt="History" width="40" height="40"></button>
+            </section>
+            <section id="manualUpdatePage" class="page manualUpdatePage active-page">
+                <header>
+                    <h2>Update balance manually</h2>
+                </header>
+                <div class="manualUpdateDetails">
+                    <label for="manualUpdateAmountField">Amount:</label>
+                    <input type="text" name="manualUpdateAmount" id="manualUpdateAmountField">
+                    <button id="manualUpdateConfirmBtn" class="manualUpdateConfirmBtn">Confirm</button>
+                </div>
+                <button id="closeManualUpdateBtn" class="closePageBtn"><img src="assets/close-icon.webp" alt="History" width="40" height="40"></button>
             </section>
         </main>
         <script src="scripts/main-new.js"></script>
