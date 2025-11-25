@@ -3,7 +3,7 @@
     --accent-color-second-hover: oklch(80.974% 0.1305 58.822);
 }
 
-.transactionBtn:hover {
+.transactionBtn:hover, .manualUpdateBtn:hover {
     background-color: var(--accent-color-hover);
 }
 

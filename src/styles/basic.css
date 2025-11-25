@@ -103,8 +103,8 @@ main {
     padding-right: 0;
 }
 
-.transactionBtn {
-    height: 2.5rem;
+.transactionBtn, .manualUpdateBtn {
+    height: 3.25rem;
     width: 10rem;
     background-color: var(--accent-color);
     padding: var(--decorative-spacing-standard);
