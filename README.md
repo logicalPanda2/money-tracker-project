@@ -53,7 +53,7 @@ TBA
 - JavaScript (ES6)
 
 ## Known Issues
-As of now, there are no known issues.
+1. Creating new transactions in a fresh session while having previously stored transactions will cause editing to fail.
 
 Issues are welcome! Please open an issue in the repository when encountering new bugs.
 
