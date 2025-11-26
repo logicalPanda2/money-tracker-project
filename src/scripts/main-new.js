@@ -57,6 +57,7 @@ class Controller {
         this.handleHistoryEdit = this.handleHistoryEdit.bind(this);
         this.handleManualUpdate = this.handleManualUpdate.bind(this);
         this.handleManualUpdateClose = this.handleManualUpdateClose.bind(this);
+        this.handleWindowLoad = this.handleWindowLoad.bind(this);
         this.isCurrentlyEditing = false;
         this.editedTransaction = null;
         this.latestDate = null;
@@ -84,6 +85,7 @@ class Controller {
         this.dom.editingButtons.closeTransactionBtn.addEventListener("click", this.handleClose);
         this.dom.editingButtons.closeManualUpdateBtn.addEventListener("click", this.handleManualUpdateClose);
         this.dom.containers.transactionHistoryContainer.addEventListener("click", this.handleHistoryEdit);
+        window.addEventListener("load", this.handleWindowLoad);
     }
 
     validateTransaction(type, amount) {
@@ -123,6 +125,7 @@ class Controller {
                 View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
                 this.editedTransaction.type = newType;
                 this.editedTransaction.amount = newAmount;
+                this.model.updateLocalStorageTransactions();
                 this.isCurrentlyEditing = false;
                 this.editedTransaction = null;
             }
@@ -138,6 +141,7 @@ class Controller {
             this.createTransactionHistory(transaction);
             this.model.transactions.push(transaction);
             this.model.updateBalance(transaction);
+            this.model.updateLocalStorageTransactions();
             View.updateBalance(this.dom.fields.globalBalanceAmount, this.model.globalBalance);
             View.resetTransactionPage(this.dom.pages.transactionPage, this.dom.fields.transactionAmountField, this.dom.fields.transactionTypeField, Controller.createMsg);
             View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
@@ -158,6 +162,7 @@ class Controller {
             View.updateBalance(this.dom.fields.globalBalanceAmount, this.model.globalBalance);
             View.deleteTransaction(this.editedTransaction.id, this.dom.selectors.transactionHistoryClass);
             this.model.deleteTransaction(this.editedTransaction.id);
+            this.model.updateLocalStorageTransactions();
             View.resetTransactionPage(this.dom.pages.transactionPage, this.dom.fields.transactionAmountField, this.dom.fields.transactionTypeField, Controller.createMsg);
             View.moveToPage(this.dom.pages.homePage, this.pages, this.dom.classNames.activeClass);
             this.isCurrentlyEditing = false;
@@ -238,6 +243,24 @@ class Controller {
         transactionElement.appendChild(timeElement); 
         View.renderElement(this.dom.containers.transactionHistoryContainer, transactionElement);
     }
+
+    handleWindowLoad() {
+        const balanceString = localStorage.getItem("balance");
+        const balance = Number(balanceString);
+        const transactionsString = localStorage.getItem("transactions");
+        const transactions = JSON.parse(transactionsString);
+
+        if(balance !== null) {
+            this.model.globalBalance = balance;
+            View.updateBalance(this.dom.fields.globalBalanceAmount, this.model.globalBalance);
+        }
+        if(transactions !== null) {
+            this.model.transactions = transactions;
+            for(const transaction of transactions) {
+                this.createTransactionHistory(transaction);
+            }
+        }
+    }
 }
 
 class View {
@@ -316,6 +339,7 @@ class Model {
         } else {
             this.globalBalance -= transaction.amount;
         }
+        this.updateLocalStorageBalance();
     }
 
     revertBalance(transaction) {
@@ -324,6 +348,7 @@ class Model {
         } else {
             this.globalBalance += transaction.amount;
         }
+        this.updateLocalStorageBalance();
     }
 
     findTransaction(id) {
@@ -341,6 +366,18 @@ class Model {
         } else {
             this.globalBalance -= newAmount;
         }
+        this.updateLocalStorageBalance();
+    }
+
+    updateLocalStorageBalance() {
+        localStorage.setItem("balance", this.globalBalance);
+    }
+
+    updateLocalStorageTransactions() {
+        localStorage.setItem("transactions", JSON.stringify(this.transactions));
+        const get = localStorage.getItem("transactions");
+        const transactions = JSON.parse(get);
+        console.log(transactions);
     }
 
     deleteTransaction(id) {
