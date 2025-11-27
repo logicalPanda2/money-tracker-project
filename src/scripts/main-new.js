@@ -193,6 +193,7 @@ class Controller {
     }
 
     handleHistoryEdit(event) {
+        View.removeErrors(this.dom.containers.errorMessageContainer);
         if(event.target.matches(this.dom.selectors.transactionAmountClass)) {
             const transaction = this.model.findTransaction(Number(event.target.id));
             View.moveToPage(this.dom.pages.transactionPage, this.pages, this.dom.classNames.activeClass);
