@@ -21,6 +21,7 @@ class Transaction {
 
         this.initializeDateAndTime();
         this.initializeId();
+        this.updateLocalStorageId();
     }
 
     initializeDateAndTime() {
@@ -41,8 +42,17 @@ class Transaction {
     }
 
     initializeId() {
+        const idString = localStorage.getItem("transactionId");
+        const id = Number(idString);
+        if(id !== null) {
+            Transaction.id = id;
+        }
         this.id = Transaction.id;
+    }
+
+    updateLocalStorageId() {
         Transaction.id += 1;
+        localStorage.setItem("transactionId", Transaction.id);
     }
 }
 
@@ -375,9 +385,6 @@ class Model {
 
     updateLocalStorageTransactions() {
         localStorage.setItem("transactions", JSON.stringify(this.transactions));
-        const get = localStorage.getItem("transactions");
-        const transactions = JSON.parse(get);
-        console.log(transactions);
     }
 
     deleteTransaction(id) {
