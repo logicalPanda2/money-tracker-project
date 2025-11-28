@@ -1,5 +1,25 @@
 {
   "devDependencies": {
     "@tauri-apps/cli": "^2.9.4"
-  }
+  },
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build"
+  },
+  "name": "01-moneytracker",
+  "version": "1.1.48",
+  "description": "Simple, minimalist money tracker",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/logicalPanda2/money-tracker-project.git"
+  },
+  "keywords": [],
+  "author": "logicalPanda2",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/logicalPanda2/money-tracker-project/issues"
+  },
+  "homepage": "https://github.com/logicalPanda2/money-tracker-project#readme"
 }
