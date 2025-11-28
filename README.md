@@ -10,8 +10,8 @@ For upcoming features and support, check out <a href="#future-plans">future plan
 
 ## Table Of Contents
 1. [Installation](#installation)
-2. [Tech Stack](#tech-stack)
-3. [Project Structure](#project-structure)
+2. [Project Structure](#project-structure)
+3. [Tech Stack](#tech-stack)
 4. [Known Issues](#known-issues)
 5. [Future Plans](#future-plans)
 6. [Author](#author)
