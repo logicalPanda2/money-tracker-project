@@ -1,6 +1,7 @@
 # Money Tracker
 <img src="assets/homePage.png" alt="home page" width="640" height="280">
 <img src="assets/transactionPage.png" alt="transaction page" width="640" height="280">
+<img src="assets/manualUpdatePage.png" alt="transaction page" width="640" height="280">
 <img src="assets/historyPage.png" alt="history page" width="640" height="280">
 
 A fully responsive, minimalist money tracker.
@@ -34,7 +35,7 @@ $ git clone https://github.com/logicalPanda2/money-tracker-project.git
 Wait until all processes are done, indicating the repository is successfully cloned.
 
 ### For users
-TBA
+The latest release is available here: https://github.com/logicalPanda2/money-tracker-project/releases/tag/v1.1.48
 
 ## Project Structure
 ```
@@ -51,6 +52,7 @@ TBA
 - HTML5
 - CSS3 (Flexbox)
 - JavaScript (ES6)
+- Tauri 2.0
 
 ## Known Issues
 As of now, there are no known issues.
