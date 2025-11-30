@@ -68,4 +68,4 @@ Expect these in the near future:
 Marcelino Romeo @logicalPanda2 (https://github.com/logicalPanda2)
 
 ## License
-This project is licensed under the <a href="LICENSE.txt">MIT</a> License.
+This project is licensed under the <a href="LICENSE.txt">MIT License</a>.
